@@ -1,24 +1,24 @@
-<b>Library used  </b>  
-pip install flask  
-pip install pocketbase  
+<h2>Library used  </h2>  
+<li></li>pip install flask</li>  
+<li>pip install pocketbase</li>  
 
 
-<b>Web Track  </b>  
+<h2>Web Track  </h2>  
 Python/Flask  
 
-<b>Project Features  </b>  
+<h2>Project Features  </h2>  
 Users – create, delete, login, logout, change password, direct message, access quiz  
 Teacher – create, delete, edit, view, direct message, create quiz, hands out assignment   
 Calendar - create, delete, view submission  
 Extra – Flexible/options in review settings/calculations, multiple classes.  
 
-</b>Work Division  <b>  
+<h2>Work Division  </h2>  
 Faris - Calender/Main page & additional features   
 Aish - Quiz page & additional features   
 Afham - User/Teacher page & additional features  
 
-<b>Clickup URL  </b>  
+<h2>Clickup URL  </h2>  
 https://app.clickup.com/9018195248/v/f/90180785731  
 
-<b>Proposal Changes (If Any)  </b>  
+<h2>Proposal Changes (If Any)  </h2>  
 -Changed topic and whole proposal (5/5/2024)
