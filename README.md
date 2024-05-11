@@ -1,5 +1,5 @@
 <h2>Library used  </h2>  
-<li></li>pip install flask</li>  
+<li>pip install flask</li>  
 <li>pip install pocketbase</li>  
 
 
