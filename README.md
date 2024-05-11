@@ -1,3 +1,8 @@
+Library used
+pip install flask/n
+pip install pocketbase/n
+
+
 Web Track
 Python/Flask
 
