@@ -7,15 +7,15 @@
 Python/Flask  
 
 <h2>Project Features  </h2>  
-Users – create, delete, login, logout, change password, direct message, access quiz  
-Teacher – create, delete, edit, view, direct message, create quiz, hands out assignment  
-Calendar - create, delete, view submission  
-Extra – Flexible/options in review settings/calculations, multiple classes.  
+Users – create, delete, login, logout, change password, direct message, access quiz  <br/>
+Teacher – create, delete, edit, view, direct message, create quiz, hands out assignment  <br/>
+Calendar - create, delete, view submission  <br/>
+Extra – Flexible/options in review settings/calculations, multiple classes.  <br/>
 
 <h2>Work Division  </h2>  
-Faris - Calender/Main page & additional features   
-Aish - Quiz page & additional features  
-Afham - User/Teacher page & additional features  
+Faris - Calender/Main page & additional features   <br/>
+Aish - Quiz page & additional features  <br/>
+Afham - User/Teacher page & additional features  <br/>
 
 <h2>Clickup URL  </h2>  
 https://app.clickup.com/9018195248/v/f/90180785731  
