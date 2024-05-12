@@ -15,8 +15,8 @@ client = PocketBase('https://alma-mater.pockethost.io')
 
 @app.route("/") #Home page
 def home():
+    session["lasturl"] = "home"
     return render_template("index.html")
-
     
 if __name__ == "__main__":
     app.run(debug = True)

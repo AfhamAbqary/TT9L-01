@@ -1,6 +1,14 @@
-<div class="bg-[#868686] min-w-full min-h-12 grid shadow-2xl">
+<div class="bg-[#868686] min-w-full min-h-12 grid shadow-2xl text-[#F5F5F5]">
     <div class="flex justify-self-end self-center min-h-6 gap-x-1.5 mx-3">
-        <a class="bg-slate-700 py-1 px-3 rounded-md" href="user/login">Log In</a>
-        <a class="bg-slate-700 py-1 px-3 rounded-md" href="user/signup">Sign In</a>
+        {% block var %}
+        {% endblock %}
+        {% set login = False if "login" in session else True %}
+        {% if login %}
+            <a class="bg-slate-700 py-1 px-3 rounded-md" href="/user/login">Log In</a>
+            <a class="bg-slate-700 py-1 px-3 rounded-md" href="/user/signup">Sign In</a>
+        {% else %}
+            <a class="bg-slate-700 py-1 px-3 rounded-md" href="/user">Profile</a>
+            <a class="bg-slate-700 py-1 px-3 rounded-md" href="/user/logout">Logout</a>
+        {% endif %}
     </div>
 </div>
