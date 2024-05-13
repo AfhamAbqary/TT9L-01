@@ -6,7 +6,10 @@
     <body>
         {% include "navigationBar.html" %}
         <div>
-            <h1>LOG OUT</h1>
+            <p>Class: </p>
+            {% for i in Class %}
+                <li>{{i}}</li>
+            {% endfor %}
         </div>
     </body>
 </html>
