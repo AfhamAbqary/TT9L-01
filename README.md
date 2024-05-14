@@ -1,3 +1,8 @@
+<h2>How to run</h2>
+Step 1: make sure that the directory in terminal is the folder containing the directory of the repo <br/>
+For example: if "C:\Users\LAPTOP\Documents\GitHub\TT9L-01", where TT9L-01 contains the codes, <b>run in "C:\Users\LAPTOP\Documents\GitHub"</b> <br/>
+Step 2: In the cmd/terminal/powershell, copy paste the command "flask --app TT9L-01 run --debug", and press enter<br/>
+
 <h2>Library used  </h2>  
 <li>pip install flask</li>  
 <li>pip install pocketbase</li>  
