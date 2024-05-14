@@ -4,7 +4,6 @@ from pocketbase.client import FileUpload
 from ..extensions import client
 
 classroom_bp = Blueprint("classroom", __name__, static_folder="", template_folder="templates")
-client = PocketBase('https://alma-mater.pockethost.io')
 
 @classroom_bp.route("/")
 def home():
