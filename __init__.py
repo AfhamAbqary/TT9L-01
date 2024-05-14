@@ -11,6 +11,7 @@ def create_app():
 
     @app.before_request
     def load_database():
+        print(session)
         if "login" in session and client.auth_store.base_model == None:
             client.collection("users").auth_with_password(session["login"][0], session["login"][1])
 
