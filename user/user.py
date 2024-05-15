@@ -1,33 +1,32 @@
-from flask import *
+from flask import Blueprint, render_template, request, session, redirect, url_for
 from pocketbase import PocketBase #MAKE SURE TO INSTALL Pocketbase BEFOREHAND
 from pocketbase.client import FileUpload
+from ..extensions import client, cipher
 
-user = Blueprint("user", __name__, static_folder="", template_folder="templates")
-client = PocketBase('https://alma-mater.pockethost.io')
+user_bp = Blueprint("user", __name__, static_folder="", template_folder="templates")
 
-@user.route("/")
+@user_bp.route("/")
 def home():
-    if "login" in session:
-        if client.auth_store.base_model == None:
-            client.collection("users").auth_with_password(session["login"][0], session["login"][1])
+    try:
         userdata = client.auth_store.base_model #Get user data from session saved
         username = userdata.username
         email = userdata.email
         teacher = "Teacher" if userdata.teacher else "Student"
         classes= [client.collection("Class").get_one(f"{i}").title for i in userdata.classes] #Get every classes registered for user
         return render_template("user.html", username=username, email=email, Teacher=teacher, Class=classes)
-    else:
-        return render_template("user.html", username="NOT LOGGED IN OR NO INTERNET CONNECTION")
+    except Exception as e:
+        return render_template("user.html", username=e)
     
 
-@user.route("/login", methods=['POST', 'GET'])
+@user_bp.route("/login", methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         user = request.form['username']
         password = request.form['password']
+        print(password)
         try:
             client.collection("users").auth_with_password(user, password) #Authorize login for data fetching and writing to database
-            session["login"] = [user,password] #Save login info to session
+            session["login"] = [user,cipher.encrypt(password)] #Save login info to session
             session["lasturl"] = "user.home"
             return redirect(url_for("user.home"))
         except Exception as e:
@@ -36,7 +35,7 @@ def login():
     else:
         return render_template("login.html")
 
-@user.route("/signup", methods=["POST","GET"])
+@user_bp.route("/signup", methods=["POST","GET"])
 def signup():
     if request.method == 'POST':
         user = request.form['username']
@@ -44,6 +43,7 @@ def signup():
         password = request.form['password']
         passwordC = request.form['passwordC']
         name = request.form['name']
+        print(password)
         try:
             client.collection("users").create(
                 {
@@ -59,7 +59,7 @@ def signup():
             )
             print("Success")
             session["lasturl"] = "user.home"
-            return redirect(url_for("user.home"))
+            return redirect(url_for("user.login"))
         except Exception as e:
             for i in e.__dict__["data"]["data"]:
                 print(f'{i}:' + e.__dict__["data"]["data"][i]["message"])
@@ -67,8 +67,9 @@ def signup():
     else:
         return render_template("signup.html")
     
-@user.route("/logout", methods=["POST","GET"])
+@user_bp.route("/logout", methods=["POST","GET"])
 def logout():
     client.auth_store.clear()
     session.pop("login", None)
-    return redirect(url_for(session["lasturl"]))
+    return render_template("logout.html")
+    #return redirect(url_for(session["lasturl"]))
