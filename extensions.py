@@ -1,4 +1,5 @@
 from pocketbase import PocketBase
+from flask_simple_crypt import SimpleCrypt
 import os
 from dotenv import load_dotenv
 import hashlib
@@ -8,5 +9,6 @@ client = PocketBase('https://alma-mater.pockethost.io')
 
 #Encrypt, decrypt & storage side
 load_dotenv()
-HASH_KEY = os.getenv("HASH_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
+cipher = SimpleCrypt()

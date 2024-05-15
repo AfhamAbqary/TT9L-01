@@ -6,6 +6,8 @@ Step 2: In the cmd/terminal/powershell, copy paste the command "flask --app TT9L
 <h2>Library used  </h2>  
 <li>pip install flask</li>  
 <li>pip install pocketbase</li>  
+<li>pip install python-dotenv</li>  
+<li>pip install Flask-Simple-Crypt</li>  
 
 
 <h2>Web Track  </h2>  

@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
-import hashlib
 from pocketbase import PocketBase #MAKE SURE TO INSTALL Pocketbase BEFOREHAND
 from pocketbase.client import FileUpload
-from ..extensions import client, HASH_KEY
+from ..extensions import client, cipher
 
 user_bp = Blueprint("user", __name__, static_folder="", template_folder="templates")
 
@@ -23,12 +22,11 @@ def home():
 def login():
     if request.method == 'POST':
         user = request.form['username']
-        password = str(request.form['password'] + HASH_KEY)
-        password = hashlib.sha256(password.encode()).hexdigest()
+        password = request.form['password']
         print(password)
         try:
             client.collection("users").auth_with_password(user, password) #Authorize login for data fetching and writing to database
-            session["login"] = [user,password] #Save login info to session
+            session["login"] = [user,cipher.encrypt(password)] #Save login info to session
             session["lasturl"] = "user.home"
             return redirect(url_for("user.home"))
         except Exception as e:
@@ -42,10 +40,8 @@ def signup():
     if request.method == 'POST':
         user = request.form['username']
         email = request.form['email'],
-        password = str(request.form['password'] + HASH_KEY)
-        password = hashlib.sha256(password.encode()).hexdigest()
-        passwordC = str(request.form['passwordC'] + HASH_KEY)
-        passwordC = hashlib.sha256(passwordC.encode()).hexdigest()
+        password = request.form['password']
+        passwordC = request.form['passwordC']
         name = request.form['name']
         print(password)
         try:
@@ -63,7 +59,7 @@ def signup():
             )
             print("Success")
             session["lasturl"] = "user.home"
-            return redirect(url_for("user.home"))
+            return redirect(url_for("user.login"))
         except Exception as e:
             for i in e.__dict__["data"]["data"]:
                 print(f'{i}:' + e.__dict__["data"]["data"][i]["message"])
