@@ -19,19 +19,23 @@ def home():
 @classroom_bp.route("/<classid>", methods=['POST', 'GET'])
 def classpage(classid):
     Class= client.collection("Class").get_one(classid).field
-    for i in Class:
-        print(Class[i]['text'])
     if request.method == 'POST':
         title = request.form.get('title')
         data = request.form.get('ckeditor')
-        field2 = client.collection("Class").get_one(classid).field
-        field = { 'messages' :{
-            'date': {date.today()},
+        field2 = client.collection("Class").get_one(classid)
+        field = { f'messages{len(field2.field)}' :{
+            'date': {},
             'file': {},
             'title': title,
             'text': data
             }}
-        field.update(field2)
+        field.update(field2.field)
         print(field)
-    return render_template('classpage.html', Class=Class)
+        data = {
+            'field': field
+        }
+        print(data)
+        client.collection('Class').update(classid, data)
+        return redirect(url_for('classroom.classpage', classid = classid))
+    return render_template('classpage.html', Class=dict(reversed(list(Class.items()))))
     

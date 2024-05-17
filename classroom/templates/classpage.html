@@ -18,7 +18,7 @@
             {% for i in Class %}
                 <div class="bg-slate-700  max-w-fit max-h-fit p-2 rounded-md text-[#F5F5F5]">
                     <p>{{Class[i]['title']}}</p>
-                    <p>{{Class[i]['text']}}</p>
+                    <p>{{Class[i]['text']|safe}}</p>
                 </div>
             {% endfor %}
         </div>
