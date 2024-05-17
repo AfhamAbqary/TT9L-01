@@ -2,6 +2,13 @@ from pocketbase import PocketBase
 from flask_simple_crypt import SimpleCrypt
 import os
 from dotenv import load_dotenv
+from flask_ckeditor import CKEditor
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+
+#Forms class
+ckeditor = CKEditor()
+
 
 #Pocketbase side
 client = PocketBase('https://alma-mater.pockethost.io')

@@ -2,7 +2,7 @@ from flask import Flask, render_template, session
 from .home.main import home_bp
 from .user.user import user_bp
 from .classroom.classroom import classroom_bp
-from .extensions import client, cipher
+from .extensions import client, cipher, ckeditor
 
 def create_app():
     app = Flask(__name__)
@@ -10,6 +10,7 @@ def create_app():
     app.secret_key = 'ALMA'
     app.config['CKEDITOR_PKG_TYPE'] = 'basic'
     cipher.init_app(app)
+    ckeditor.init_app(app)
 
     @app.before_request
     def load_database():
