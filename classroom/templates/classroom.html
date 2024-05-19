@@ -8,8 +8,8 @@
         {% include "navigationBar.html" %}
         <div>
             <p>Class: </p>
-            {% for i in Class %}
-                <li>{{i}}</li>
+            {% for i in classroom %}
+                <li><a href="{{ '/classroom/%s' %i.id}}">{{i.title}}</a></li>
             {% endfor %}
         </div>
     </body>
