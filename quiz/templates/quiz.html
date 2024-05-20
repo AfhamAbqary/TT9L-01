@@ -11,7 +11,7 @@
         <ul class="list-disc pl-5">
             {% for cls in quiz %}
                 <li class="mb-2">
-                    <a href="/class/{{ cls.id }}" class="text-violet-500 hover:underline">{{ cls }}</a>
+                    <a href="{{ '/quiz/%s' %cls.id}}" class="text-violet-500 hover:underline">{{ cls.title }}</a>
                 </li>
             {% endfor %}
         </ul>

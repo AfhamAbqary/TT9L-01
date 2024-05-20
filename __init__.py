@@ -3,7 +3,7 @@ from .home.main import home_bp
 from .user.user import user_bp
 from .classroom.classroom import classroom_bp
 from .quiz.quiz import quiz_bp
-from .extensions import client, cipher
+from .extensions import client, cipher, ckeditor
 
 def create_app():
     app = Flask(__name__)

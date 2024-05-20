@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from ..extensions import client, ckeditor
 from datetime import date
 
-classroom_bp = Blueprint("classroom", __name__, static_folder="", template_folder="website")
+classroom_bp = Blueprint("classroom", __name__, static_folder="", template_folder="templates")
 
 @classroom_bp.route("/")
 def home():
