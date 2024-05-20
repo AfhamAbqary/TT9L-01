@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="with=device-width",
+    initial-scale="1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Calendar</title>
+</head>
+
+<body>
+    <div id="calendar_container">
+        <div id="header">
+            <div id="month"></div>
+            <div>
+                <button id="backbutton">Back</button>
+                <button id="nextbutton">Next</button>
+            </div>
+
+            <div id="weekdays">
+                <div>Monday</div>
+                <div>Tuesday</div>
+                <div>Wednesday</div>
+                <div>Thursday</div>
+                <div>Friday</div>
+                <div>Saturday</div>
+                <div>Sunday</div>
+            </div>
+
+        <div id="calendar"></div>
+
+    </div>
+
+    <div id="newEventModal">
+        <h2>New Events</h2>
+
+        <input id="eventTitleInput" placeholder="Event Title" />
+
+        <button id="savebutton">Save</button>
+        <button id="cancelbutton">Cancel</button>
+    </div>
+
+    <div id="deleteEventModal">
+        <h2>Events</h2>
+
+        <p id="eventText"></p>
+
+        <button id="deletebutton">Delete</button>
+        <button id="closebutton">CLose</button>
+
+    </div>
+
+    <div id="modalBackDrop"></div>
+
+    
+
+</body>
+
+</html>
