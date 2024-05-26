@@ -7,20 +7,42 @@
     </head>
     <body>
         {% include "navigationBar.html" %}
-        <div>
-            <form method="post">
-                <input type="text" name="title" class="h-8 text-xl"/>
-                {{ ckeditor.create() }}
-                <input type="submit" class="text-black-100 hover:bg-sky-700">
-            </form>
-        </div>
-        <div class="grid gap-2">
-            {% for i in Class %}
-                <div class="bg-slate-700  max-w-fit max-h-fit p-2 rounded-md text-[#F5F5F5]">
-                    <p>{{Class[i]['title']}}</p>
-                    <p>{{Class[i]['text']|safe}}</p>
+        <p class="font-bold text-2xl mb-2 m-5">{{ ClassName.title }}</p>
+        <div class="flex m-5 gap-3">
+            <div class="bg-slate-400 flex-grow grid grid-cols-1 gap-2 h-max p-2">
+                {% for i in Class %}
+                    <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                        <p class="font-semibold text-xl mb-2">{{Class[i]['title']}}</p>
+                        <p class="text-wrap text-gray-500 dark:text-gray-400">{{Class[i]['text']|safe}}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="flex-none w-50">
+                <div class="min-w-max">
+                    <p>Invite Code: {{ ClassName.id }}</p>
                 </div>
-            {% endfor %}
+                {% if teacher %}
+                <div class=" max-w-max p-2 m-3 rounded-md bg-slate-100">
+                    <form method="post">
+                        <input type="text" name="title" class="h-8 text-xl m-2"/>
+                        {{ ckeditor.create() }}
+                        <input type="submit" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create Post">
+                    </form>
+                </div>
+                <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                    <form method="post">
+                        <p>Create quiz: </p>
+                        <input type="submit" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create">
+                    </form>
+                </div>
+                {% else %}
+                <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                    <form method="post">
+                        <p>No Quiz! </p>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </body>
 </html>
