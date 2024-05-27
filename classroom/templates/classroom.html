@@ -11,14 +11,14 @@
             <form class="w-full max-w-sm" method="post">
                 <div class="flex items-center border-b py-2">
                   <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" name="title" type="text" placeholder="Classroom" aria-label="Full name">
-                  <input class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" type="submit" value="Create"></input>
+                  <input type="submit" name="create" class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create"></input>
                 </div>
             </form>
             {% else %}
             <form class="w-full max-w-sm" method="post">
                 <div class="flex items-center border-b py-2">
                   <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" name="title" type="text" placeholder="Classroom" aria-label="Full name">
-                  <input class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" type="submit" value="Join"></input>
+                  <input type="submit" name="join" value="Join" class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800">
                 </div>
             </form>
             {% endif %}
@@ -35,7 +35,7 @@
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
                             </p>
                         </div>
-                        <form method="post"><button class="text-sm m-3 text-white py-1 px-2 rounded bg-red-500 hover:bg-red-800" name="Leave">Leave</button></form>
+                        <form method="post"><button type="submit" value="{{i.id}}" class="text-sm m-3 text-white py-1 px-2 rounded bg-red-500 hover:bg-red-800" name="leave" >Leave</button></form>
                     </div>
                 </a>
             {% endfor %}
