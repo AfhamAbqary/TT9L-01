@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>Profile</title>
@@ -5,11 +6,40 @@
     </head>
     <body>
         {% include "navigationBar.html" %}
+        <div class="m-2">
+            {% if teacher %}
+            <form class="w-full max-w-sm" method="post">
+                <div class="flex items-center border-b py-2">
+                  <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" name="title" type="text" placeholder="Classroom" aria-label="Full name">
+                  <input type="submit" name="create" class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create"></input>
+                </div>
+            </form>
+            {% else %}
+            <form class="w-full max-w-sm" method="post">
+                <div class="flex items-center border-b py-2">
+                  <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" name="title" type="text" placeholder="Classroom" aria-label="Full name">
+                  <input type="submit" name="join" value="Join" class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800">
+                </div>
+            </form>
+            {% endif %}
+        </div>
         <div>
             <p>Class: </p>
-            {% for i in Class %}
-                <li>{{i}}</li>
+            <div class="flex gap-5 m-5">
+            {% for i in classroom %}
+                <a href="{{ '/classroom/%s' %i.id}}" class="max-w-fit hover:scale-105 transition ease-in-out">
+                    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                        <div class="px-6 py-4">
+                            <div class="font-bold text-xl mb-2">{{i.title}}</div>
+                            <p class="text-gray-700 text-base">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+                            </p>
+                        </div>
+                        <form method="post"><button type="submit" value="{{i.id}}" class="text-sm m-3 text-white py-1 px-2 rounded bg-red-500 hover:bg-red-800" name="leave" >Leave</button></form>
+                    </div>
+                </a>
             {% endfor %}
+            </div>
         </div>
     </body>
 </html>
