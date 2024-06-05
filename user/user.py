@@ -10,7 +10,14 @@ def home():
         username = userdata.username
         email = userdata.email
         teacher = "Teacher" if userdata.teacher else "Student"
-        classes= [client.collection("Class").get_one(f"{i}") for i in userdata.classes]
+        if userdata.teacher:
+            classes= client.collection("Class").get_full_list(query_params={
+                'filter': f'Teachers.id~"{userdata.id}"'
+            })
+        else:
+            classes= client.collection("Class").get_full_list(query_params={
+                'filter': f'Students.id?~"{userdata.id}"'
+            })
         return render_template("user.html", username=username, email=email, Teacher=teacher, Class=classes)
     except Exception as e:
         return render_template("user.html", username=e)

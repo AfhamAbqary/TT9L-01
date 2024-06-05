@@ -8,34 +8,69 @@
     </head>
     <body>
         {% include "navigationBar.html" %}
-        <p class="font-bold text-2xl mb-2 m-5">{{ ClassName.title }}</p>
+        <p class="font-bold text-2xl mb-2 m-5">{{ ClassName }}</p>
+        {% if teacher %}
+        <section class="flex">
+            <div class=" p-2 m-3 rounded-md bg-slate-100 shrink w-9/12">
+                <form method="post">
+                    <input type="text" name="title" class="h-8 text-xl m-2"/>
+                    {{ ckeditor.create() }}
+                    <input type="submit" name="create post" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create Post">
+                </form>
+            </div>
+            <div>                
+                <input type="text" name="title" id="SearchBar" onkeyup="myFilter()" placeholder="Search for names..." class="h-8 text-sm"/>
+                <div class="relative overflow-x-auto  h-72 overscroll-auto m-2 rounded-md">
+                    <table id="users" class="max-w-max text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-md">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 p-4 text-center">
+                            <tr>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table">
+                        {% for i in users %}
+                            <tr id="UserInfo" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{i.username}}</th>
+                                {% if i.teacher %}
+                                    <td id="UserName" class="px-6 py-4"> Teacher </td>
+                                {% else %}
+                                    <td class="px-6 py-4"> Student </td>
+                                {% endif %}
+                                <td> 
+                                    <form method="post">
+                                        <button id="remove" value="{{i.id}}" name="remove" type="submit" class="text-sm m-3 text-white py-1 px-2 rounded bg-red-500 hover:bg-red-800">Kick Out</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table> 
+                </div>
+            </div>
+        </section>
+        {% endif %}
         <div class="flex m-5 gap-3">
             <div class="bg-slate-400 flex-grow grid grid-cols-1 gap-2 h-max p-2">
-                {% for i in Class %}
+                {% for i in post %}
                     <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
-                        <p class="font-semibold text-xl mb-2">{{Class[i]['title']}}</p>
-                        <p class="text-wrap text-gray-500 dark:text-gray-400">{{Class[i]['text']|safe}}</p>
+                        <p class="font-semibold text-xl mb-2">{{i.title}}</p>
+                        <p class="text-wrap text-gray-500">{{i.text|safe}}</p>
                     </div>
                 {% endfor %}
             </div>
-            <div class="flex-none w-50">
+            <section class="flex-none min-w-96">
                 <div class="min-w-max">
-                    <p>Invite Code: {{ ClassName.id }}</p>
+                    <p>Invite Code: {{ classid }}</p>
                 </div>
                 {% if teacher %}
-                <div class=" max-w-max p-2 m-3 rounded-md bg-slate-100">
-                    <form method="post">
-                        <input type="text" name="title" class="h-8 text-xl m-2"/>
-                        {{ ckeditor.create() }}
-                        <input type="submit" name="create post" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create Post">
-                    </form>
-                </div>
-                <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
-                    <form method="post">
-                        <p>Create quiz: </p>
-                        <input type="submit" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create">
-                    </form>
-                </div>
+                    <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                        <form method="post">
+                            <p>Create quiz: </p>
+                            <input type="submit" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create">
+                        </form>
+                    </div>
                 {% else %}
                 <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
                     <form method="post">
@@ -43,8 +78,27 @@
                     </form>
                 </div>
                 {% endif %}
-            </div>
+            </section>
         </div>
+        <script>
+            function myFilter() {
+                var input, table, users, name, filter, textValue;
+                input = document.getElementById("SearchBar");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("table");
+                users = table.getElementsByTagName("tr");
+
+                for (i = 0; i < users.length; i++) {
+                    name = users[i].getElementsByTagName("th")[0];
+                    textValue = name.textContent || name.innerText;
+                    if (textValue.toUpperCase().indexOf(filter) > -1) {
+                        users[i].style.display = "";
+                    } else {
+                        users[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     </body>
 </html>
