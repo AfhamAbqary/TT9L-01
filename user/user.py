@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from ..extensions import client, cipher
 
-user_bp = Blueprint("user", __name__, static_folder="", template_folder="templates")
+user_bp = Blueprint("user", __name__)
 
 @user_bp.route("/")
 def home():
