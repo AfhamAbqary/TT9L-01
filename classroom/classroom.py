@@ -85,7 +85,7 @@ def classpage(classid):
             "sort": '-created'
         })
         userList = client.collection("users").get_full_list(query_params={
-        'filter': f'Classes.id?="{classid}"'
+        'filter': f'Classes.id?="{classid}" && Teacher=false'
         })
         name = client.collection("Class").get_one(classid)
     except Exception as e:

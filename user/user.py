@@ -44,7 +44,7 @@ def login():
 def signup():
     if request.method == 'POST':
         user = request.form['username']
-        email = request.form['email'],
+        email = request.form['email']
         password = request.form['password']
         passwordC = request.form['passwordC']
         name = request.form['name']

@@ -9,7 +9,9 @@ ckeditor = CKEditor()
 
 
 #Pocketbase side
-client = PocketBase('https://alma-mater.pockethost.io')
+#client = PocketBase('http://pocketbase-ew40kc0.5.161.103.200.sslip.io')
+client = PocketBase('https://alma-mater.pockethost.io/')
+
 
 #Initialise libraries
 
