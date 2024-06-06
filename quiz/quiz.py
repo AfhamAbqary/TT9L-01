@@ -18,10 +18,42 @@ def home():
 
 @quiz_bp.route("/<classid>", methods=['POST', 'GET'])
 def quizpage(classid):
-    class_data = client.collection("Class").get_one(classid) #fetch data
-    
+    class_data = client.collection("Questions").get_full_list(query_params={
+    "filter": f"Owner.id='{classid}'"
+    })
+    #print(class_data)
+
+
+    Questions = client.collection("Questions").get_full_list(query_params={
+        "filter" : f'Owner.id = "{classid}"',
+        'sort': '+created'
+    })
+    print(Questions)
+
+    if request.method == "POST":
+        title = request.form.get('question_text')
+        classid2 = request.form.get('option1') 
+        classid3 = request.form.get('option2')
+
+
+        
+        print("Title", title)
+        print("option 1:", classid2)
+        print("option 2:", classid3)
+        print("Class ID", classid)
+
+        client.collection("Questions").create({
+                "Title": title,
+                "Option1": classid2,
+                "Option2": classid3,
+                "Owner": classid
+        })
+        return redirect(url_for("quiz.quizpage", classid=classid))
+
+
+
     # render quizpage
-    #return render_template("quizpage.html", class_data=class_data)
+    return render_template("quizpage.html", class_data=Questions)
 
     #test without fetching database
-    return render_template("quizpage2.html", class_data=class_data)
+    #return render_template("quizpage2.html", class_data=class_data)
