@@ -1,0 +1,6 @@
+flask
+pocketbase
+flask_simple_crypt
+python-dotenv
+Flask-WTF
+flask_ckeditor

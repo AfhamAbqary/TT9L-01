@@ -1,0 +1,31 @@
+<head>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white">
+    {% include "navigationBar.html" %}
+    <section class="flex"> 
+        <div class="m-4 shrink w-4/5 rounded border border-gray-300 backdrop-blur-xl bg-white/30 shadow-lg p-4 space-y-3 h-max"> <!--m-4 shrink w-4/5 rounded border border-gray-300 backdrop-blur-xl bg-white/30 shadow-lg p-4 space-y-3 h-max-->
+            <p class="font-bold text-2xl">{{post.title}}</p> <!-- -->
+            <div class="">
+                </br>
+                {{post.text|safe}}
+                </br></br>
+            </div>
+        </div>
+        <div class="m-4 shrink rounded grid grid-cols-1 border border-gray-300 backdrop-blur-xl bg-white/30 shadow-lg p-4 space-y-2">
+            <p>Files</p>
+            {% for i in Urls%}
+                <a href="{{i[1]}}" target="_blank" class="block w-full h-8 p-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 truncate">
+                    <p class="font-normal text-xs text-gray-700">{{i[0]}}</p>
+                </a>
+            {% endfor %}
+        </div>
+        {% if post.meet_id != 0 %}
+        <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                <a href="{{ '/classroom/%s/meeting' %post.id}}">Join Meeting</a>
+        </div>
+        {% endif %}
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>

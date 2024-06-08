@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from ..extensions import client, cipher
 
-user_bp = Blueprint("user", __name__, static_folder="", template_folder="templates")
+user_bp = Blueprint("user", __name__)
 
 @user_bp.route("/")
 def home():
@@ -10,7 +10,14 @@ def home():
         username = userdata.username
         email = userdata.email
         teacher = "Teacher" if userdata.teacher else "Student"
-        classes= [client.collection("Class").get_one(f"{i}") for i in userdata.classes]
+        if userdata.teacher:
+            classes= client.collection("Class").get_full_list(query_params={
+                'filter': f'Teachers.id~"{userdata.id}"'
+            })
+        else:
+            classes= client.collection("Class").get_full_list(query_params={
+                'filter': f'Students.id?~"{userdata.id}"'
+            })
         return render_template("user.html", username=username, email=email, Teacher=teacher, Class=classes)
     except Exception as e:
         return render_template("user.html", username=e)
@@ -37,7 +44,7 @@ def login():
 def signup():
     if request.method == 'POST':
         user = request.form['username']
-        email = request.form['email'],
+        email = request.form['email']
         password = request.form['password']
         passwordC = request.form['passwordC']
         name = request.form['name']

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+        <script src="https://cdn.tailwindcss.com"></script>
+        {{ ckeditor.load() }}
+    </head>
+    <body class="bg-white">
+        {% include "navigationBar.html" %}
+        <p class="font-bold text-2xl mb-2 m-5">{{ ClassName }}</p>
+        {% if teacher %}
+        <section class="flex m-4 rounded backdrop-blur-xl bg-white/30 shadow-lg">
+            <form method="post" id="postSubmit" class="p-2 m-3 rounded-md shrink w-9/12 space-y-4" enctype="multipart/form-data">
+                <input type="text" name="title" class="backdrop-blur-sm bg-white/10 border border-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-300 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Title" required />
+                {{ ckeditor.create() }}
+                <div class="flex space-x-4">
+                    <input id="create" type="submit" name="create post" class="mr-auto text-sm text-white mx-2 my-1 py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create Post">
+                    <!--"flex-shrink-0 ml-auto m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800-->
+                    <div class="flex gap-2 mr-auto">
+                        <input type="file" name="file" class="block w-50 h-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="multiple_files" type="file" multiple>
+
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="True" name="MeetConfirm" class="sr-only peer">
+                            <div class="relative w-11 h-6 bg-gray-200  rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="ms-3 text-sm font-medium text-gray-900">Includes meet link</span>
+                        </label>
+                    </div>
+  
+                </div>
+            </form>
+            <div class="w-3/12 m-4">
+                <form class="max-w-md mx-auto m-2">   
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                        </div>
+                        <input type="search" id="SearchBar" onkeyup="myFilter()" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-black rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search by name..." required />
+                    </div>
+                </form>
+                <div class="relative overflow-x-auto w-70  h-72 overscroll-auto m-2 p-2 rounded-md backdrop-blur-sm bg-white/30">
+                    <ul id="users" class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+                        {% for i in users %}
+                                <li id="UserInfo" class="pb-3 sm:pb-4">
+                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                                        <div class="flex-1 min-w-0">
+                                            <p id="UserName" class="m-1 text-sm font-semibold text-gray-900 truncate">
+                                                {{i.username}}
+                                            </p>
+                                            <p class="m-1 text-sm truncate">
+                                                {% if i.teacher %}
+                                                    Teacher 
+                                                {% else %}
+                                                    Student
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="inline-flex items-center text-base font-medium text-white">
+                                            <form method="post">
+                                                <button id="remove" value="{{i.id}}" name="remove" type="submit" class="m-1 p-1 rounded drop-shadow-md bg-red-500 hover:bg-red-800">Kick Out</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+        <div class="flex m-5 gap-3 rounded">
+            <div class=" flex-grow grid grid-cols-1 gap-2 h-max p-2"> <!--bg-slate-400-->
+                {% for i in post %}
+                    <div class="flex bg-slate-200 border border-gray-300 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                        <a href="{{ '/classroom/%s' %classid+'/'+i.id}}" class=" w-full font-semibold mr-auto text-xl mb-2">{{i.title}}</a>
+                        {% if teacher %}
+                        <form method="post">
+                            <button value="{{i.id}}" name="remove post"class="text-sm ml-auto text-white py-1 px-2 rounded drop-shadow-md bg-red-500 hover:bg-red-800">Remove</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <section class="flex-none min-w-96">
+                <div class="min-w-max">
+                    <p>Invite Code: {{ classid }}</p>
+                </div>
+                {% if teacher %}
+                    <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                        <form method="post">
+                            <p>Create quiz: </p>
+                            <input type="submit" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create">
+                        </form>
+                    </div>
+                {% else %}
+                <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                    <form method="post">
+                        <p>No Quiz! </p>
+                    </form>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+        <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+        <script>
+            function myFilter() {
+                var input, table, users, name, filter, textValue;
+                input = document.getElementById("SearchBar");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("users");
+                users = table.getElementsByTagName("li");
+
+                for (i = 0; i < users.length; i++) {
+                    name = users[i].getElementsByTagName("p")[0];
+                    textValue = name.textContent || name.innerText;
+                    if (textValue.toUpperCase().indexOf(filter) > -1) {
+                        users[i].style.display = "";
+                    } else {
+                        users[i].style.display = "none";
+                    }
+                }
+            };
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    </body>
+</html>
