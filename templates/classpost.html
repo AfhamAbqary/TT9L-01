@@ -21,6 +21,11 @@
                 </a>
             {% endfor %}
         </div>
+        {% if post.meet_id != 0 %}
+        <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
+                <a href="{{ '/classroom/%s/meeting' %post.id}}">Join Meeting</a>
+        </div>
+        {% endif %}
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>

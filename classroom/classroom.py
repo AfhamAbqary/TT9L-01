@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
-from ..extensions import client, ckeditor, FileUpload
+from ..extensions import client, ckeditor, FileUpload, random
 from datetime import date
 
 classroom_bp = Blueprint("classroom", __name__)
@@ -97,6 +97,9 @@ def classpage(classid):
             title = request.form.get('title')
             data = request.form.get('ckeditor')
             files = request.files.getlist('file')
+            meetConfirm = request.form.get('MeetConfirm')
+            meetConfirm = random.randint(0,100000) if meetConfirm else None
+            print(meetConfirm)
             formatedList = []
             for i in files:
                 formatedList.append((i.filename, i))
@@ -105,7 +108,7 @@ def classpage(classid):
                 "Title": title,
                 "Text": data,
                 "Image": FileUpload(*formated),
-                "Url": "",
+                "MeetID": meetConfirm,
                 "Owner": classid
             })
         elif "remove" in request.form:
@@ -128,8 +131,16 @@ def postpage(classid, postid):
     info = client.collection("posts").get_one(postid)
     image_type = ['png', 'jpeg', 'jpg', 'gif', 'webp', 'bmp']
     urls_for_file = []
+    print(info.meet_id)
     for i in info.image:
         url = client.get_file_url(info, i, {})
         urls_for_file.append((i, url))
     return render_template('classpost.html', post=info, Urls=urls_for_file)
+
+@classroom_bp.route("/<postid>/meeting")
+def join(postid):
+    post = client.collection("posts").get_one(postid)
+    print(post.meet_id)
+    userdata = client.auth_store.base_model
+    return render_template('meetjoin.html', user=userdata, post=post)
     

@@ -4,6 +4,7 @@ from flask_simple_crypt import SimpleCrypt
 import os
 from dotenv import load_dotenv
 from flask_ckeditor import CKEditor
+import random
 
 #Forms class
 ckeditor = CKEditor()
