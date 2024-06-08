@@ -2,6 +2,7 @@ from flask import Flask, render_template, session
 from .home.main import home_bp
 from .user.user import user_bp
 from .classroom.classroom import classroom_bp
+from .meeting.meeting import meet_bp
 from .extensions import client, cipher, ckeditor
 
 def create_app():
@@ -20,5 +21,6 @@ def create_app():
     app.register_blueprint(home_bp, url_prefix="/")
     app.register_blueprint(user_bp, url_prefix="/user")
     app.register_blueprint(classroom_bp, url_prefix="/classroom")
+    app.register_blueprint(meet_bp, url_prefix="/meeting")
 
     return app

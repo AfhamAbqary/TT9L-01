@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
-from ..extensions import client, ckeditor
+from ..extensions import client, ckeditor, FileUpload
 from datetime import date
 
 classroom_bp = Blueprint("classroom", __name__)
@@ -96,9 +96,15 @@ def classpage(classid):
         if "create post" in request.form:
             title = request.form.get('title')
             data = request.form.get('ckeditor')
+            files = request.files.getlist('file')
+            formatedList = []
+            for i in files:
+                formatedList.append((i.filename, i))
+            formated = ((i[0], i[1]) for i in formatedList)
             client.collection("posts").create({
                 "Title": title,
                 "Text": data,
+                "Image": FileUpload(*formated),
                 "Url": "",
                 "Owner": classid
             })
@@ -111,10 +117,19 @@ def classpage(classid):
             client.collection("users").update(id, {
                 'Classes-': classid
             })
+        elif "remove post" in request.form:
+            id = request.form['remove post']
+            client.collection("posts").delete(id)
         return redirect(url_for('classroom.classpage', classid = classid))
     return render_template('classpage.html', teacher=userdata.teacher, ClassName=name.title, post=posts, classid = classid, users=userList)
 
-@classroom_bp.route("/<classid>/user")
-def classusers(classid):
-    return render_template('classuser.html')
+@classroom_bp.route("/<classid>/<postid>")
+def postpage(classid, postid):
+    info = client.collection("posts").get_one(postid)
+    image_type = ['png', 'jpeg', 'jpg', 'gif', 'webp', 'bmp']
+    urls_for_file = []
+    for i in info.image:
+        url = client.get_file_url(info, i, {})
+        urls_for_file.append((i, url))
+    return render_template('classpost.html', post=info, Urls=urls_for_file)
     

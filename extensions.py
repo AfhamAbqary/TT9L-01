@@ -1,4 +1,5 @@
 from pocketbase import PocketBase
+from pocketbase.client import FileUpload
 from flask_simple_crypt import SimpleCrypt
 import os
 from dotenv import load_dotenv
