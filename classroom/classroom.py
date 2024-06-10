@@ -126,16 +126,39 @@ def classpage(classid):
         return redirect(url_for('classroom.classpage', classid = classid))
     return render_template('classpage.html', teacher=userdata.teacher, ClassName=name.title, post=posts, classid = classid, users=userList)
 
-@classroom_bp.route("/<classid>/<postid>")
+@classroom_bp.route("/<classid>/<postid>", methods=['POST', 'GET'])
 def postpage(classid, postid):
     info = client.collection("posts").get_one(postid)
+    comments = client.collection("comments").get_full_list(query_params={
+        'filter': f'Owner.id="{postid}"',
+        "sort": '+created',
+        'expand': 'Poster'
+    })
+
+    comments_filter = []
+
+    for i in comments:
+        for j in [i.expand['Poster']]:
+            if i.poster == j.id:
+                comments_filter.append(((j.id, j.username, i.message)))
+
     image_type = ['png', 'jpeg', 'jpg', 'gif', 'webp', 'bmp']
     urls_for_file = []
     print(info.meet_id)
     for i in info.image:
         url = client.get_file_url(info, i, {})
         urls_for_file.append((i, url))
-    return render_template('classpost.html', post=info, Urls=urls_for_file)
+        
+    if request.method == 'POST':
+        if "comment" in request.form:
+            comment = request.form.get("comment-text")
+            client.collection('comments').create({
+                "Owner": postid,
+                "Poster": client.auth_store.base_model.id,
+                "message": comment
+            })
+        return redirect(url_for("classroom.postpage", classid=classid, postid=postid ,post=info, Urls=urls_for_file, comments=comments_filter, userid=client.auth_store.base_model.id))
+    return render_template('classpost.html', post=info, Urls=urls_for_file, comments=comments_filter, userid=client.auth_store.base_model.id)
 
 @classroom_bp.route("/<postid>/meeting")
 def join(postid):
