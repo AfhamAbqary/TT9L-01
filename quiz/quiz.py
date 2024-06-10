@@ -18,42 +18,67 @@ def home():
 
 @quiz_bp.route("/<classid>", methods=['POST', 'GET'])
 def quizpage(classid):
-    class_data = client.collection("Questions").get_full_list(query_params={
-    "filter": f"Owner.id='{classid}'"
-    })
-    #print(class_data)
-
-
+    Class_data = client.collection("Quiz").get_one(classid)
     Questions = client.collection("Questions").get_full_list(query_params={
         "filter" : f'Owner.id = "{classid}"',
         'sort': '+created'
     })
     print(Questions)
 
+
     if request.method == "POST":
+
         title = request.form.get('question_text')
         classid2 = request.form.get('option1') 
         classid3 = request.form.get('option2')
-
-
+        classid4 = request.form.get('option3')
+        classid5 = request.form.get('option4')
+        answer =  request.form.get('Correct_Answer')
         
-        print("Title", title)
-        print("option 1:", classid2)
-        print("option 2:", classid3)
-        print("Class ID", classid)
+        if 'submit_button' in request.form:
+            correct__answer = 0
+            for i in Questions:
+                user_answer=request.form[f'answer{i}']
+                if user_answer == i.correct__answer:
+                    print(True)
+                    correct__answer += 1
+                    client.collection("Questions").update(i.id,{
+                        "Correct_Students+": client.auth_store.base_model.id 
+                    })
+                
+                else:
+                    print(False)
+                    client.collection("Questions").update(i.id,{
+                        "Wrong_Students+": client.auth_store.base_model.id 
+                    })
+                
+            print(correct__answer)
+      
+            
+        
+            
+            return redirect(url_for("quiz.resultquiz", classid = classid))
 
         client.collection("Questions").create({
                 "Title": title,
                 "Option1": classid2,
                 "Option2": classid3,
+                "Option3": classid4,
+                "Option4": classid5,
+                "Correct_Answer": answer, 
                 "Owner": classid
         })
-        return redirect(url_for("quiz.quizpage", classid=classid))
+        return render_template("quizpage.html", class_data=Questions, Class=Class_data)
 
 
 
     # render quizpage
-    return render_template("quizpage.html", class_data=Questions)
+    return render_template("quizpage.html", class_data=Questions, Class=Class_data)
 
-    #test without fetching database
-    #return render_template("quizpage2.html", class_data=class_data)
+@quiz_bp.route("/<classid>/resultquiz", methods=['POST', 'GET'])
+def resultquiz(classid):
+    Questions = client.collection("Questions").get_full_list(query_params={
+        "filter" : f'Owner.id ="{classid}" && Correct_Students~"{client.auth_store.base_model.id }"'
+    })
+    print(Questions)
+    return '<h1> correct ans</h1>' 
