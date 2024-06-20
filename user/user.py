@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
+from pocketbase import PocketBase #MAKE SURE TO INSTALL Pocketbase BEFOREHAND
+from pocketbase.client import FileUpload
 from ..extensions import client, cipher
 
-user_bp = Blueprint("user", __name__, static_folder="", template_folder="templates")
+user_bp = Blueprint("user", __name__)
 
 @user_bp.route("/")
 def home():
@@ -10,7 +12,7 @@ def home():
         username = userdata.username
         email = userdata.email
         teacher = "Teacher" if userdata.teacher else "Student"
-        classes= [client.collection("Class").get_one(f"{i}") for i in userdata.classes]
+        classes= [client.collection("Class").get_one(f"{i}").title for i in userdata.classes] #Get every classes registered for user
         return render_template("user.html", username=username, email=email, Teacher=teacher, Class=classes)
     except Exception as e:
         return render_template("user.html", username=e)
