@@ -197,4 +197,3 @@ def join(postid):
         return render_template('meetjoin.html', user=userdata, post=post) # Pass data to html
     except Exception as e:
         return render_template("Error.html", error=e)
-    
