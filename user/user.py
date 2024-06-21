@@ -147,3 +147,4 @@ def change():
         return render_template("loginchange.html") # Load change HTML page
     except Exception as e:
         return render_template("Error.html", error=e)
+

@@ -204,3 +204,4 @@ def resultquiz(classid):
             return render_template("resultquiz.html", Student_data=Student_data, teacher=False)
     except Exception as e:
         return render_template("Error.html", error=e)
+
