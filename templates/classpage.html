@@ -87,20 +87,17 @@
                 <div class="min-w-max">
                     <p>Invite Code: {{ classid }}</p>
                 </div>
-                {% if teacher %}
-                    <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
-                        <form method="post">
-                            <p>Create quiz: </p>
-                            <input type="submit" class="flex-shrink-0 m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create">
-                        </form>
-                    </div>
-                {% else %}
                 <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
-                    <form method="post">
-                        <p>No Quiz! </p>
+                    <p>Quiz Link:</p>
+                    <form action="{{ '/quiz/%s' %classid}}">
+                        <button class="bg-blue-500 text-white my-2 px-4 py-1 rounded-md cursor-pointer hover:bg-blue-600">Quiz</button>
                     </form>
+                    {% if Visible %}
+                        <p>Status: <b class="text-green-600">Open</b></p>
+                    {% else %}
+                        <p>Status: <b class="text-orange-600">Closed</b></p>
+                    {% endif %}
                 </div>
-                {% endif %}
             </section>
         </div>
         <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>

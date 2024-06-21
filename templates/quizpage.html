@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    {% include "navigationBar.html" %}
+    {% if Visible == "Visible" or teacher %}
+    <h1 class="text-3xl font-bold mb-4">Quiz for Class: {{ Class.name }}</h1>
+    <p class="text-gray-700 mb-6">Description: {{ Class.description }}</p>
+    <div class="flex gap-10 container py-8 m-4">
+            {% if teacher %}
+                <ul id="users" class="w-full max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+                    <div class="bg-white p-6 rounded-lg shadow mb-8">
+                        <div class="flex">
+                            <p class="self-center">Status: {{Visible}}</p>
+                            <form method="post"><button type="submit" class="text-sm m-3 text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-600" name="change" >Change</button></form>
+                        </div>
+                        <h2 class="text-xl font-semibold mb-4">Add New Question</h2>
+                        <form method="post">
+                            <div class="mb-4">
+                                <label for="question_text" class="block mb-1">Question: </label>
+                                <input type="text" id="question_text" name="question_text" placeholder="Enter question here" class="w-full border rounded-md py-2 px-3">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="option1" class="block mb-1">Option 1:</label>
+                                <input type="text" name="option1" placeholder="Option 1" class="w-full border rounded-md py-2 px-3">
+                            </div>
+                            <div class="mb-4">
+                                <label for="option2" class="block mb-1">Option 2:</label>
+                                <input type="text"  name="option2" placeholder="Option 2" class="w-full border rounded-md py-2 px-3">
+                            </div>
+                            <div class="mb-4">
+                                <label for="option3" class="block mb-1">Option 3:</label>
+                                <input type="text" name="option3" placeholder="Option 3" class="w-full border rounded-md py-2 px-3">
+                            </div>
+                            <div class="mb-4">
+                                <label for="option4" class="block mb-1">Option 4:</label>
+                                <input type="text" name="option4" placeholder="Option 4" class="w-full border rounded-md py-2 px-3">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block mb-1">Correct Answer:</label>
+                                <input type="text" name="Correct_Answer" placeholder="jawapan dia ah" class="w-full border rounded-md py-2 px-3">
+                            </div>
+
+                            <input type="submit" name="Add_Question" value="Add_Question" class="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600">
+                        </form>
+                    </div>
+                </ul>
+            {% endif %}
+            <!--<h2 class="text-xl font-semibold mb-4">Existing Questions</h2>-->
+            <form method="post" class="w-full">
+                {% for question in class_data %}
+                    <div class="bg-white p-6 rounded-lg shadow mb-4 right-5">
+                        <label class="font-bold">{{ question.title }}</label><br>
+                        <input type="radio" name="answer_{{question.id}}" value="{{ question.option1 }}" class="mr-2">
+                        <label class="font-semibold">{{ question.option1 }}</label><br>
+                        <input type="radio" name="answer_{{question.id}}" value="{{ question.option2 }}" class="mr-2">
+                        <label class="font-semibold">{{ question.option2 }}</label><br>
+                        <input type="radio" name="answer_{{question.id}}" value="{{ question.option3 }}" class="mr-2">
+                        <label class="font-semibold">{{ question.option3 }}</label><br>
+                        <input type="radio" name="answer_{{question.id}}" value="{{ question.option4 }}" class="mr-2">
+                        <label class="font-semibold">{{ question.option4 }}</label><br>
+                        <div class="mt-2">
+                        {% if teacher %}
+                            <button type="submit" value="{{question.id}}" class="text-sm m-3 text-white py-1 px-2 rounded bg-red-500 hover:bg-red-800" name="remove" >Delete</button>
+                        {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if teacher %}
+                    <form method="post"><input type="submit" name="submit_button" value="Check Results" class="bg-green-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-green-600"></form>
+                {% else %}
+                    <form method="post"><input type="submit" name="submit_button" value="Submit Answer" class="bg-green-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-green-600"></form>
+                {% endif %}
+            </form>
+    </div>
+    {% else %}
+    <div class="grid grid-cols-1 w-full h-screen bg-red-500">
+        <p class="text-6xl font-black place-self-center"> Quiz Not Available Yet</p>
+    </div>
+    {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+
+
+
+

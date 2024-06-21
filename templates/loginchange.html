@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gradient-to-r from-cyan-500 to-blue-500 ">
+        {% include "navigationBar.html" %}
+        <div class="bg-white m-10 p-4 h-full rounded overflow-hidden shadow-lg">
+            <form class="max-w-sm mx-auto" method="post">
+                <div class="mb-5">
+                  <label for="Username" class="block mb-2 text-sm font-medium text-gray-900">Username (Optional)</label>
+                  <input type="Username" name="Username" id="Username" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Username" />
+                </div>
+                <div class="mb-5">
+                    <label for="new-password" class="block mb-2 text-sm font-medium text-gray-900">New password (Optional)</label>
+                    <input type="password" name="new-password" id="new-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                </div>
+                <div class="mb-5">
+                    <label for="repeat-password" class="block mb-2 text-sm font-medium text-gray-900">Confirm new password (Optional)</label>
+                    <input type="password" name="repeat-password" id="repeat-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                  </div>
+                <div class="mb-5">
+                  <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Current password <b class="text-orange-600">*</b></label>
+                  <input type="password" name="password" id="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required/>
+                </div>
+
+
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update account</button>
+              </form>
+              
+              
+              
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    </body>
+</html>
