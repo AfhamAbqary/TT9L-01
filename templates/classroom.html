@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classroom</title>
+    <!-- Importing custom CSS and Tailwind CSS -->
     <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen">
+<!-- Using a gradient background for better aesthetics -->
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Including navigation bar component -->
     {% include "navigationBar.html" %}
+    <!-- Main content container -->
     <div class="container mx-auto px-4 py-12">
+        <!-- Create/Join Classroom section -->
         <div class="mb-12">
             {% if teacher %}
-            <h2 class="text-3xl font-bold text-indigo-800 mb-6">Create a New Classroom</h2>
+            <!-- Teacher view: Create a new classroom -->
+            <h2 class="text-3xl font-bold text-indigo-900 mb-6">Create a New Classroom</h2>
             <form class="w-full max-w-lg bg-white shadow-lg rounded-xl p-8" method="post">
                 <div class="flex items-center space-x-4">
                     <input class="flex-grow appearance-none bg-gray-100 border-2 border-gray-200 rounded-lg py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 transition duration-300" name="title" type="text" placeholder="Classroom Name" aria-label="Classroom name">
@@ -22,7 +28,8 @@
                 </div>
             </form>
             {% else %}
-            <h2 class="text-3xl font-bold text-indigo-800 mb-6">Join a Classroom</h2>
+            <!-- Student view: Join a classroom -->
+            <h2 class="text-3xl font-bold text-indigo-900 mb-6">Join a Classroom</h2>
             <form class="w-full max-w-lg bg-white shadow-lg rounded-xl p-8" method="post">
                 <div class="flex items-center space-x-4">
                     <input class="flex-grow appearance-none bg-gray-100 border-2 border-gray-200 rounded-lg py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 transition duration-300" name="title" type="text" placeholder="Classroom Code" aria-label="Classroom code">
@@ -34,23 +41,28 @@
             {% endif %}
         </div>
 
+        <!-- List of classrooms -->
         <div>
-            <h2 class="text-3xl font-bold text-indigo-800 mb-6">Your Classrooms</h2>
+            <h2 class="text-3xl font-bold text-indigo-900 mb-6">Your Classrooms</h2>
+            <!-- Grid layout for classroom cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for i in classroom %}
+                <!-- Individual classroom card -->
                 <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
                     <a href="{{ '/classroom/%s' %i.id}}" class="block">
                         <div class="px-6 py-4">
-                            <h3 class="font-bold text-xl mb-2 text-indigo-700">{{i.title}}</h3>
-                            <p class="text-gray-600 text-sm">This is your registered classroom! Be sure to check it out!</p>
+                            <h3 class="font-bold text-xl mb-2 text-indigo-800">{{i.title}}</h3>
+                            <p class="text-gray-700 text-sm">This is your registered classroom! Be sure to check it out!</p>
                         </div>
                     </a>
                     <div class="px-6 py-4 bg-gray-50 flex justify-end">
                         {% if teacher %}
+                        <!-- Teacher view: Destroy classroom button -->
                         <form method="post">
                             <button type="submit" value="{{i.id}}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1" name="leave">Destroy</button>
                         </form>
                         {% else %}
+                        <!-- Student view: Leave classroom button -->
                         <form method="post">
                             <button type="submit" value="{{i.id}}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1" name="leave">Leave</button>
                         </form>
@@ -61,6 +73,7 @@
             </div>
         </div>
     </div>
+    <!-- Importing Flowbite JS for additional functionality -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 </html>

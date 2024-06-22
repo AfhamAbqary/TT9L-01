@@ -1,14 +1,24 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <!-- Title of the webpage -->
     <title>Quiz Results</title>
+    <!-- Include Tailwind CSS from CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-r from-blue-50 to-purple-50 min-h-screen">
+    <!-- Include navigation bar from external file -->
     {% include "navigationBar.html" %}
+    
+    <!-- Conditional rendering based on 'teacher' variable -->
     {% if teacher %}
+    <!-- Container for teacher view with flex layout and padding -->
     <div class="container mx-auto px-4 py-8">
+        <!-- Flex container with column layout on large screens -->
         <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar section for search and clear functionality -->
             <div class="w-full lg:w-1/4">
+                <!-- Search bar with input and search icon -->
                 <div class="flex items-center gap-3 mb-4">
                     <div class="relative flex-grow">
                         <input type="search" id="SearchBar" onkeyup="myFilter()" class="w-full p-2.5 pl-10 text-sm text-gray-900 border-none rounded-lg bg-white shadow-md focus:ring-2 focus:ring-blue-300 transition duration-300" placeholder="Search by name..." required />
@@ -18,23 +28,30 @@
                             </svg>
                         </div>
                     </div>
+                    <!-- Form for clearing all filters -->
                     <form method="post">
                         <button id="clearall" name="clearall" type="submit" class="bg-red-500 text-white py-2.5 px-4 mt-5 rounded-lg hover:bg-red-600 transition duration-300 text-sm font-medium shadow-md hover:shadow-lg">Clear All</button>
                     </form>
                 </div>
+                <!-- List of student results with scrollable overflow -->
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
                     <ul id="users" class="divide-y divide-gray-200 max-h-[28rem] overflow-y-auto text-sm">
+                        <!-- Loop through student data -->
                         {% for i in Student_data %}
                         <li id="UserInfo" class="px-4 py-3 hover:bg-gray-50 transition duration-150 ease-in-out">
+                            <!-- Individual student result -->
                             <div class="flex items-center justify-between">
                                 <div class="flex-grow mr-4">
+                                    <!-- Student name -->
                                     <div id="UserName" class="font-medium text-gray-900 mb-0.5">{{i['name']}}</div>
+                                    <!-- Display correct, wrong answers, and score -->
                                     <div class="text-xs text-gray-500 flex items-center space-x-2">
                                         <span class="bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Correct: {{i['correct_answer']}}</span>
                                         <span class="bg-red-100 text-red-800 px-1.5 py-0.5 rounded">Wrong: {{i['wrong_answer']}}</span>
                                         <span class="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Score: {{i['score']}}</span>
                                     </div>
                                 </div>
+                                <!-- Form for clearing individual student -->
                                 <form method="post">
                                     <button id="clear" value="{{i['id']}}" name="clear" type="submit" class="text-xs bg-red-500 text-white px-3 py-1.5 rounded-full hover:bg-red-600 transition duration-300 shadow-sm hover:shadow-md">Clear</button>
                                 </form>
@@ -44,19 +61,27 @@
                     </ul>
                 </div>
             </div>
+            <!-- Main content area for displaying questions -->
             <div class="w-full lg:w-3/4 grid gap-6">
+                <!-- Loop through each question -->
                 {% for i in Questions %}
+                <!-- Card for each question with details -->
                 <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+                    <!-- Question title -->
                     <h3 class="text-xl font-semibold mb-4">{{i['name']}}</h3>
+                    <!-- Grid layout for displaying details -->
                     <div class="grid grid-cols-3 gap-4 text-center">
+                        <!-- Box for correct answers -->
                         <div class="bg-green-50 rounded-lg p-3">
                             <p class="text-sm text-gray-600 mb-1">Correct Answer</p>
                             <p class="text-2xl font-bold text-green-600">{{i['Correct']}}</p>
                         </div>
+                        <!-- Box for wrong answers -->
                         <div class="bg-red-50 rounded-lg p-3">
                             <p class="text-sm text-gray-600 mb-1">Wrong Answer</p>
                             <p class="text-2xl font-bold text-red-600">{{i['Wrong']}}</p>
                         </div>
+                        <!-- Box for scores -->
                         <div class="bg-blue-50 rounded-lg p-3">
                             <p class="text-sm text-gray-600 mb-1">Score</p>
                             <p class="text-2xl font-bold text-blue-600">{{i['Score']}}</p>
@@ -67,20 +92,29 @@
             </div>
         </div>
     </div>
+    <!-- If not teacher, display single student's results -->
     {% else %}
+    <!-- Container for single student view -->
     <div class="container mx-auto px-4 py-8">
+        <!-- Card for displaying student result -->
         <div class="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
+            <!-- Title for student result -->
             <h1 class="text-3xl font-bold mb-6 text-center">Result</h1>
+            <!-- Student name -->
             <p class="text-2xl font-semibold text-center mb-8">{{Student_data[0]['name']}}</p>
+            <!-- Grid layout for displaying details -->
             <div class="grid grid-cols-3 gap-8 text-center">
+                <!-- Box for correct answers -->
                 <div>
                     <p class="text-lg font-medium mb-2">Correct Answer</p>
                     <p class="text-4xl font-bold text-green-500">{{Student_data[0]['correct_answer']}}</p>
                 </div>
+                <!-- Box for wrong answers -->
                 <div>
                     <p class="text-lg font-medium mb-2">Wrong Answer</p>
                     <p class="text-4xl font-bold text-red-500">{{Student_data[0]['wrong_answer']}}</p>
                 </div>
+                <!-- Box for scores -->
                 <div>
                     <p class="text-lg font-medium mb-2">Score</p>
                     <p class="text-4xl font-bold text-blue-500">{{Student_data[0]['score']}}</p>
@@ -89,6 +123,8 @@
         </div>
     </div>
     {% endif %}
+    
+    <!-- JavaScript function for filtering users by name -->
     <script>
         function myFilter() {
             var input, filter, ul, li, name, i, txtValue;

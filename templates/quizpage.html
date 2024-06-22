@@ -1,39 +1,55 @@
 <!DOCTYPE html>
+<html>
 <head>
+    <!-- Title dynamically set based on class name -->
     <title>Quiz - {{ Class.name }}</title>
+    <!-- Link to external CSS file -->
     <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <!-- Include Tailwind CSS from CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-r from-blue-50 to-purple-50 min-h-screen">
+    <!-- Include navigation bar from external file -->
     {% include "navigationBar.html" %}
+    
+    <!-- Conditional rendering based on quiz availability and user role -->
     {% if Visible == "Visible" or teacher %}
+    <!-- Main container for quiz content -->
     <div class="container mx-auto px-4 py-8">
+        <!-- Title and description of the quiz -->
         <h1 class="text-3xl font-bold mb-4">Quiz for Class: {{ Class.name }}</h1>
         <p class="text-gray-700 mb-6">Description: {{ Class.description }}</p>
+        
+        <!-- Flex container for different sections -->
         <div class="flex flex-col lg:flex-row gap-10">
             {% if teacher %}
+                <!-- Sidebar for teacher actions -->
                 <div class="w-full lg:w-1/3">
+                    <!-- Card for quiz status and controls -->
                     <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
                         <div class="flex items-center justify-between mb-4">
+                            <!-- Display quiz status -->
                             <p class="self-center">Status: {{Visible}}</p>
+                            <!-- Form to change quiz visibility -->
                             <form method="post">
                                 <button type="submit" class="text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-600 transition duration-300" name="change">Change</button>
                             </form>
                         </div>
+                        <!-- Section to add a new question -->
                         <h2 class="text-xl font-semibold mb-4">Add New Question</h2>
                         <form method="post">
+                            <!-- Input fields for question and options -->
                             <div class="mb-4">
-                                <label for="question_text" class="block mb-1">Question: </label>
+                                <label for="question_text" class="block mb-1">Question:</label>
                                 <input type="text" id="question_text" name="question_text" placeholder="Enter question here" class="w-full border rounded-md py-2 px-3">
                             </div>
-
                             <div class="mb-4">
                                 <label for="option1" class="block mb-1">Option 1:</label>
                                 <input type="text" name="option1" placeholder="Option 1" class="w-full border rounded-md py-2 px-3">
                             </div>
                             <div class="mb-4">
                                 <label for="option2" class="block mb-1">Option 2:</label>
-                                <input type="text"  name="option2" placeholder="Option 2" class="w-full border rounded-md py-2 px-3">
+                                <input type="text" name="option2" placeholder="Option 2" class="w-full border rounded-md py-2 px-3">
                             </div>
                             <div class="mb-4">
                                 <label for="option3" class="block mb-1">Option 3:</label>
@@ -43,21 +59,28 @@
                                 <label for="option4" class="block mb-1">Option 4:</label>
                                 <input type="text" name="option4" placeholder="Option 4" class="w-full border rounded-md py-2 px-3">
                             </div>
+                            <!-- Input field for correct answer -->
                             <div class="mb-4">
                                 <label class="block mb-1">Correct Answer:</label>
                                 <input type="text" name="Correct_Answer" placeholder="Enter correct answer" class="w-full border rounded-md py-2 px-3">
                             </div>
-
+                            <!-- Button to submit new question -->
                             <input type="submit" name="Add_Question" value="Add Question" class="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600 transition duration-300">
                         </form>
                     </div>
                 </div>
             {% endif %}
+            
+            <!-- Main quiz section -->
             <div class="w-full {% if teacher %}lg:w-2/3{% endif %}">
                 <form method="post" class="space-y-6">
+                    <!-- Loop through each question in class data -->
                     {% for question in class_data %}
+                        <!-- Card for each question -->
                         <div class="bg-white p-6 rounded-lg shadow-lg mb-4">
+                            <!-- Title of the question -->
                             <label class="font-bold text-lg mb-2 block">{{ question.title }}</label>
+                            <!-- Radio inputs for options -->
                             <div class="space-y-2">
                                 <div>
                                     <input type="radio" id="option1_{{question.id}}" name="answer_{{question.id}}" value="{{ question.option1 }}" class="mr-2">
@@ -76,6 +99,7 @@
                                     <label for="option4_{{question.id}}" class="text-gray-700">{{ question.option4 }}</label>
                                 </div>
                             </div>
+                            <!-- Delete button for teachers -->
                             {% if teacher %}
                                 <div class="mt-4">
                                     <button type="submit" value="{{question.id}}" class="text-sm text-white py-1 px-2 rounded bg-red-500 hover:bg-red-600 transition duration-300" name="remove">Delete</button>
@@ -83,6 +107,8 @@
                             {% endif %}
                         </div>
                     {% endfor %}
+                    
+                    <!-- Submit button (different labels for teachers and students) -->
                     <div class="text-center">
                         {% if teacher %}
                             <input type="submit" name="submit_button" value="Check Results" class="bg-green-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-green-600 transition duration-300">
@@ -94,12 +120,11 @@
             </div>
         </div>
     </div>
+    <!-- If quiz is not available, display a message -->
     {% else %}
     <div class="grid grid-cols-1 w-full h-screen bg-red-500">
         <p class="text-6xl font-black place-self-center text-white"> Quiz Not Available Yet</p>
     </div>
     {% endif %}
 </body>
-
-
-
+</html>

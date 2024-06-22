@@ -4,37 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post - {{ post.title }}</title>
+    <!-- Importing custom CSS and Tailwind CSS -->
     <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen">
+<!-- Using a gradient background for better aesthetics -->
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Including navigation bar component -->
     {% include "navigationBar.html" %}
     
+    <!-- Main content container -->
     <div class="container mx-auto px-4 py-12">
+        <!-- Flex container for responsive layout -->
         <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Main content area -->
             <div class="lg:w-3/4">
+                <!-- Post content card -->
                 <div class="bg-white shadow-xl rounded-xl overflow-hidden">
                     <div class="p-8">
-                        <h1 class="text-4xl font-bold text-indigo-800 mb-6">{{post.title}}</h1>
-                        <div class="prose max-w-none text-gray-700">
+                        <!-- Post title -->
+                        <h1 class="text-4xl font-bold text-indigo-900 mb-6">{{post.title}}</h1>
+                        <!-- Post content -->
+                        <div class="prose max-w-none text-gray-800">
                             {{post.text|safe}}
                         </div>
                     </div>
                     
+                    <!-- Comments section -->
                     <div class="bg-gray-50 p-8 mt-8">
-                        <h2 class="text-2xl font-semibold text-indigo-700 mb-6">Comments</h2>
+                        <h2 class="text-2xl font-semibold text-indigo-800 mb-6">Comments</h2>
+                        <!-- List of comments -->
                         <div class="space-y-6 mb-8">
                             {% for comment in comments %}
-                            <div class="bg-white p-4 rounded-lg shadow-md">
-                                <p class="font-semibold text-indigo-600">{{ comment[1] }}</p>
-                                <p class="text-gray-600 mt-2">{{ comment[2] }}</p>
+                            <!-- Individual comment card with hover effect -->
+                            <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                                <p class="font-semibold text-indigo-700">{{ comment[1] }}</p>
+                                <p class="text-gray-700 mt-2">{{ comment[2] }}</p>
                             </div>
                             {% endfor %}
                         </div>
+                        <!-- Comment form -->
                         <form method="post">
                             <label for="chat" class="sr-only">Your message</label>
                             <div class="flex items-center space-x-4 bg-white rounded-lg p-2">
                                 <textarea id="chat" name="comment-text" rows="1" class="flex-grow block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your message..."></textarea>
+                                <!-- Submit button with SVG icon -->
                                 <button type="submit" name="comment" class="inline-flex justify-center p-2 text-indigo-600 rounded-full cursor-pointer hover:bg-indigo-100 transition duration-300">
                                     <svg class="w-6 h-6 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                                         <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
@@ -47,20 +61,24 @@
                 </div>
             </div>
             
+            <!-- Sidebar -->
             <div class="lg:w-1/4 space-y-8">          
                 {% if post.meet_id != 0 %}
-                <div class="bg-white shadow-lg rounded-xl p-6">
-                    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Meeting</h3>
+                <!-- Meeting join card -->
+                <div class="bg-white shadow-lg rounded-xl p-6 hover:shadow-xl transition duration-300">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-4">Meeting</h3>
                     <a href="{{ '/classroom/%s/meeting' %post.id}}" class="inline-block px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">Join Meeting</a>
                 </div>
                 {% endif %}
 
-                <div class="bg-white shadow-lg rounded-xl p-6">
-                    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Files</h3>
+                <!-- Files card -->
+                <div class="bg-white shadow-lg rounded-xl p-6 hover:shadow-xl transition duration-300">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-4">Files</h3>
                     <div class="space-y-3">
                         {% for i in Urls %}
+                        <!-- File link with hover effect -->
                         <a href="{{i[1]}}" target="_blank" class="block p-3 bg-gray-50 hover:bg-indigo-50 rounded-lg transition duration-300">
-                            <p class="text-sm text-gray-600 truncate">{{i[0]}}</p>
+                            <p class="text-sm text-gray-700 truncate">{{i[0]}}</p>
                         </a>
                         {% endfor %}
                     </div>
@@ -69,6 +87,7 @@
         </div>
     </div>
 
+    <!-- Importing Flowbite JS for additional functionality -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 </html>

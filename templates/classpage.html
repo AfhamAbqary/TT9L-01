@@ -4,25 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ClassName }} - Class Page</title>
+    <!-- Importing custom CSS for additional styling -->
     <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <!-- Including Tailwind CSS for utility classes -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Loading CKEditor for rich text editing in post creation -->
     {{ ckeditor.load() }}
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen">
+<!-- Using a gradient background for a more appealing visual effect -->
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Including the navigation bar component -->
     {% include "navigationBar.html" %}
     
+    <!-- Main content container with responsive padding -->
     <div class="container mx-auto px-4 py-12">
-        <h1 class="text-4xl font-bold text-indigo-800 mb-8">{{ ClassName }}</h1>
+        <!-- Class name heading with large, bold text -->
+        <h1 class="text-4xl font-bold text-indigo-900 mb-8">{{ ClassName }}</h1>
         
         {% if teacher %}
+        <!-- Teacher-only section for creating new posts -->
         <section class="bg-white shadow-xl rounded-xl p-8 mb-12">
-            <h2 class="text-2xl font-semibold text-indigo-700 mb-6">Create New Post</h2>
+            <h2 class="text-2xl font-semibold text-indigo-800 mb-6">Create New Post</h2>
+            <!-- Form for creating a new post with file upload capability -->
             <form method="post" id="postSubmit" class="space-y-6" enctype="multipart/form-data">
+                <!-- Input field for post title -->
                 <input type="text" name="title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Title" required />
+                <!-- CKEditor instance for rich text editing -->
                 {{ ckeditor.create() }}
                 <div class="flex flex-wrap items-center gap-6">
+                    <!-- Submit button for creating the post -->
                     <button id="create" type="submit" name="create post" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">Create Post</button>
+                    <!-- File upload input with custom styling -->
                     <input type="file" name="file" class="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition duration-300" multiple>
+                    <!-- Checkbox for including a meet link -->
                     <label class="inline-flex items-center">
                         <input type="checkbox" value="True" name="MeetConfirm" class="form-checkbox h-5 w-5 text-indigo-600">
                         <span class="ml-2 text-gray-700">Includes meet link</span>
@@ -32,14 +46,20 @@
         </section>
         {% endif %}
         
+        <!-- Main content area with responsive layout -->
         <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Posts list section -->
             <div class="lg:w-2/3">
-                <h2 class="text-2xl font-semibold text-indigo-700 mb-6">Posts</h2>
+                <h2 class="text-2xl font-semibold text-indigo-800 mb-6">Posts</h2>
+                <!-- Container for individual post items -->
                 <div class="space-y-6">
                     {% for i in post %}
-                    <div class="bg-white shadow-lg rounded-xl p-6 flex justify-between items-center">
-                        <a href="{{ '/classroom/%s' %classid+'/'+i.id}}" class="text-xl font-medium text-indigo-600 hover:text-indigo-800 transition duration-300">{{i.title}}</a>
+                    <!-- Individual post item with hover effect -->
+                    <div class="bg-white shadow-lg rounded-xl p-6 flex justify-between items-center hover:shadow-xl transition duration-300">
+                        <!-- Link to individual post page -->
+                        <a href="{{ '/classroom/%s' %classid+'/'+i.id}}" class="text-xl font-medium text-indigo-700 hover:text-indigo-900 transition duration-300">{{i.title}}</a>
                         {% if teacher %}
+                        <!-- Teacher-only option to remove a post -->
                         <form method="post">
                             <button value="{{i.id}}" name="remove post" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 transform hover:-translate-y-1 hover:shadow-md">Remove</button>
                         </form>
@@ -49,28 +69,35 @@
                 </div>
             </div>
             
+            <!-- Sidebar section -->
             <div class="lg:w-1/3 space-y-8">
-                <div class="bg-white shadow-lg rounded-xl p-6">
-                    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Class Information</h3>
-                    <p class="text-gray-600">Invite Code: <span class="font-medium text-indigo-600">{{ classid }}</span></p>
+                <!-- Class information card -->
+                <div class="bg-white shadow-lg rounded-xl p-6 hover:shadow-xl transition duration-300">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-4">Class Information</h3>
+                    <p class="text-gray-700">Invite Code: <span class="font-medium text-indigo-700">{{ classid }}</span></p>
                 </div>
                 
-                <div class="bg-white shadow-lg rounded-xl p-6">
-                    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Quiz</h3>
-                    <p class="text-gray-600 mb-4">Status: 
+                <!-- Quiz status and link card -->
+                <div class="bg-white shadow-lg rounded-xl p-6 hover:shadow-xl transition duration-300">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-4">Quiz</h3>
+                    <p class="text-gray-700 mb-4">Status: 
                         {% if Visible %}
                         <span class="text-green-600 font-semibold">Open</span>
                         {% else %}
                         <span class="text-orange-600 font-semibold">Closed</span>
                         {% endif %}
                     </p>
+                    <!-- Link to quiz page -->
                     <a href="{{ '/quiz/%s' %classid}}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">Go to Quiz</a>
                 </div>
                 
                 {% if teacher %}
-                <div class="bg-white shadow-md rounded-lg p-4">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Class Members</h3>
+                <!-- Teacher-only section for managing class members -->
+                <div class="bg-white shadow-lg rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-4">Class Members</h3>
+                    <!-- Search input for filtering class members -->
                     <input type="search" id="SearchBar" onkeyup="myFilter()" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4" placeholder="Search by name...">
+                    <!-- List of class members -->
                     <ul id="users" class="max-h-64 overflow-y-auto">
                         {% for i in users %}
                         <li id="UserInfo" class="py-2 border-b last:border-b-0">
@@ -79,6 +106,7 @@
                                     <p id="UserName" class="font-medium text-gray-800">{{i.username}}</p>
                                     <p class="text-sm text-gray-600">{% if i.teacher %}Teacher{% else %}Student{% endif %}</p>
                                 </div>
+                                <!-- Form for removing a class member -->
                                 <form method="post">
                                     <button id="remove" value="{{i.id}}" name="remove" type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600 transition duration-300">Kick Out</button>
                                 </form>
@@ -91,25 +119,25 @@
             </div>
         </div>
     </div>
+    <!-- JavaScript for filtering class members -->
     <script>
         function myFilter() {
-            var input, table, users, name, filter, textValue;
+            var input, filter, users, name, i, txtValue;
             input = document.getElementById("SearchBar");
             filter = input.value.toUpperCase();
-            table = document.getElementById("users");
-            users = table.getElementsByTagName("li");
-
+            users = document.getElementById("users").getElementsByTagName("li");
             for (i = 0; i < users.length; i++) {
                 name = users[i].getElementsByTagName("p")[0];
-                textValue = name.textContent || name.innerText;
-                if (textValue.toUpperCase().indexOf(filter) > -1) {
+                txtValue = name.textContent || name.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
                     users[i].style.display = "";
                 } else {
                     users[i].style.display = "none";
                 }
             }
-        };
+        }
     </script>
+    <!-- Including Flowbite JS for additional UI components and functionality -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 </html>

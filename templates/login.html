@@ -1,56 +1,76 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Login</title>
-        <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 min-h-screen">
-        {% include "navigationBar.html" %}
-        <div class="flex container mx-auto px-4 py-8 items-center justify-center">
-            <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h2 class="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">Login</h2>
-                <form class="space-y-6" method="post">
-                    <div>
-                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                        <input type="text" name="username" id="username" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your username" required />
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" name="password" id="password" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password" required />
-                    </div>
-                    <div>
-                        <button type="submit" value="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign In</button>
-                    </div>
-                </form>
-            </div>
+<head>
+    <!-- Title of the webpage -->
+    <title>Login</title>
+    <!-- Link to custom CSS file -->
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <!-- Include Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 min-h-screen">
+    <!-- Include navigation bar from external file -->
+    {% include "navigationBar.html" %}
+    
+    <!-- Main container for login form -->
+    <div class="flex container mx-auto px-4 py-8 items-center justify-center">
+        <!-- Login form container with white background, padding, and shadow -->
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+            <!-- Login form heading with gradient text and center alignment -->
+            <h2 class="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">Login</h2>
+            <!-- Form element with vertical spacing -->
+            <form class="space-y-6" method="post">
+                <!-- Username input field with label -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" name="username" id="username" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your username" required />
+                </div>
+                <!-- Password input field with label -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password" required />
+                </div>
+                <!-- Sign In button with styles for width, color, hover effects, and focus states -->
+                <div>
+                    <button type="submit" value="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign In</button>
+                </div>
+            </form>
         </div>
-        {% if error %}
-        <div id="error-alert" class="fixed bottom-0 left-0 right-0 mb-4 mx-4">
-            <div class="max-w-md mx-auto bg-red-100 border-l-4 border-red-500 rounded-r-lg shadow-lg p-4">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+    </div>
+    
+    <!-- Error alert section displayed conditionally based on 'error' variable -->
+    {% if error %}
+    <div id="error-alert" class="fixed bottom-0 left-0 right-0 mb-4 mx-4">
+        <!-- Error alert box with max width, red background, border, rounded corners, and shadow -->
+        <div class="max-w-md mx-auto bg-red-100 border-l-4 border-red-500 rounded-r-lg shadow-lg p-4">
+            <div class="flex items-center">
+                <!-- Error icon -->
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <!-- Error message -->
+                <div class="ml-3 flex-grow">
+                    <p class="text-sm text-red-700 font-medium">
+                        {{ error }}
+                    </p>
+                </div>
+                <!-- Close button for error alert with red color, hover effect, and focus state -->
+                <div class="ml-auto pl-3">
+                    <button type="button" class="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" onclick="document.getElementById('error-alert').style.display='none';">
+                        <span class="sr-only">Dismiss</span>
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
-                    </div>
-                    <div class="ml-3 flex-grow">
-                        <p class="text-sm text-red-700 font-medium">
-                            {{ error }}
-                        </p>
-                    </div>
-                    <div class="ml-auto pl-3">
-                        <button type="button" class="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" onclick="document.getElementById('error-alert').style.display='none';">
-                            <span class="sr-only">Dismiss</span>
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
-        {% endif %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    </body>
+    </div>
+    {% endif %}
+    
+    <!-- Include Flowbite JS from CDN for additional functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
 </html>
