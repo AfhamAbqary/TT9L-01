@@ -3,31 +3,27 @@ from pocketbase import PocketBase
 from pocketbase.client import FileUpload
 from ..extensions import client
 
+# Create a Blueprint for the quiz routes
 quiz_bp = Blueprint("quiz", __name__,)
 
 @quiz_bp.route("/", methods=["POST", "GET"])
 def home():
     try:
-        quiz_classes = []
-        userdata = client.auth_store.base_model
-        if userdata.teacher:
+        userdata = client.auth_store.base_model # Get the current authenticated user data
+        if userdata.teacher:                    # If the user is a teacher, get the list of classes they teach
             classes= client.collection("Class").get_full_list(query_params={
                 'filter': f'Teachers.id~"{userdata.id}"'
             })
-        else:
+        else:                                   # If the user is a student, get the list of classes they are enrolled in
             classes= client.collection("Class").get_full_list(query_params={
                 'filter': f'Students.id?~"{userdata.id}"'
             })
         for i in classes:
-            quiz_classes.append({
-                "id": i.id,
-                "name": i.title,
-                "visible": i.visible
-            })
+            print(i)
         return render_template("quiz.html", quiz=classes)
-    except Exception as e:
-        return render_template("Error.html", error=e)
-
+    except Exception as e: #e as the value of the error
+        return render_template("Error.html", error=e) # If error, will be notified/ rendered
+    
 @quiz_bp.route("/<classid>", methods=['POST', 'GET'])
 def quizpage(classid):
     try:
@@ -35,40 +31,37 @@ def quizpage(classid):
         Quiz = client.collection("Quiz")
         Class_data = Quiz.get_one(classid)
         Visible = "Visible" if (Class_data.visible) else "Hidden"
+        # Check if the student has already answered the quiz
         if userdata.id in Class_data.students:
             return redirect(url_for("quiz.resultquiz", classid=classid))
         else:
             if userdata.id in Class_data.students:
                 return "<h1>Already Answered</h1>"
-            Questions = client.collection("Questions").get_full_list(query_params={
-                "filter" : f'Owner.id = "{classid}"',
+            Questions = client.collection("Questions").get_full_list(query_params={  # Get the list of questions for the quiz
+                "filter" : f'Owner.id = "{classid}"',     #Quiz id == question owner 
                 'sort': '+created'
             })
 
-            for i in Questions:
-                print(i)
-                print(i.__dict__)
-                print("\n")
-
             if request.method == "POST":
 
-                if "change" in request.form:
-                    if Class_data.visible:
+                if "change" in request.form:               # Toggle the visibility of the quiz
+                    if Class_data.visible == True:
                         Quiz.update(classid, {
                             "Visible": False
                         })
-                    else:
+                    elif Class_data.visible == False:
                         Quiz.update(classid, {
                             "Visible": True
                         })
-
+               
+                # Add new question to the quiz
                 if 'Add_Question' in request.form:
                     title = request.form.get('question_text')
                     classid2 = request.form.get('option1') 
                     classid3 = request.form.get('option2')
                     classid4 = request.form.get('option3')
                     classid5 = request.form.get('option4')
-                    answer =  request.form.get('Correct_Answer')
+                    answer =  request.form.get('Correct_Answer')    # Receive from html 
 
                     client.collection("Questions").create({
                             "Title": title,
@@ -77,30 +70,31 @@ def quizpage(classid):
                             "Option3": classid4,
                             "Option4": classid5,
                             "Correct_Answer": answer, 
-                            "Owner": classid
+                            "Owner": classid                      # Proceeds to send to database 
                     })
 
                     
                 elif 'remove' in request.form:
-                    question = request.form.get("remove")
-                    client.collection('Questions').delete(question)
+                    question_id = request.form.get("remove")
+                    client.collection('Questions').delete(question_id)  # Delete item by id 
                     
                 
-                elif 'submit_button' in request.form:
+                elif 'submit_button' in request.form:               # Submit button
                     if userdata.teacher:
-                        return redirect(url_for("quiz.resultquiz", classid=classid))
+                        return redirect(url_for("quiz.resultquiz", classid=classid))    # Renders teacher's part of result quiz page (STUDENT'S INFROMATION)
                     else:
                         correct__answer = 0
-                        
                         for i in Questions:      
-                            user_answer = request.form[f'answer_{i.id}']
-                            if user_answer.replace(" ","").upper() == i.correct__answer.replace(" ","").upper():
+                            user_answer = request.form[f'answer_{i.id}']  
+                            if user_answer.replace(" ","").upper() == i.correct__answer.replace(" ","").upper():   # Determine correct answer
+                                print(True)
                                 correct__answer += 1
                                 client.collection("Questions").update(i.id,{
                                     "Correct_Students+": client.auth_store.base_model.id 
                                 })
                             
                             else:
+                                print(False)
                                 client.collection("Questions").update(i.id,{
                                     "Wrong_Students+": client.auth_store.base_model.id 
                                 })
@@ -121,27 +115,28 @@ def quizpage(classid):
 def resultquiz(classid):
     try:
         userdata = client.auth_store.base_model
-        Quiz = client.collection("Quiz").get_one(classid, query_params={
+        Quiz = client.collection("Quiz").get_one(classid, query_params={ # Get list of students that answered the quiz
             'expand': 'Students'
         })
         Student_data = []
-        Questions = client.collection("Questions").get_full_list(query_params={
+        Questions = client.collection("Questions").get_full_list(query_params={ # List of questions with correct students and wrong students for each questions
         "filter" : f'Owner.id ="{classid}"',
         'expand': 'Correct_Students, Wrong_Students'
         })
         correct_answer = 0
         wrong_answer = 0
-        if userdata.teacher:
+        if userdata.teacher:                 # Result page for teacher
             Question_data = []
 
             for i in Questions:
-                Question_data.append({
+                Question_data.append({                             # question data
                     "name": i.title,
                     "Correct": len(i.correct__students),
                     "Wrong": len(i.wrong__students),
                     "Score": str((len(i.correct__students)/len(Quiz.students))*100).split(".")[0] + "%" if len(Quiz.students) != 0 else str(0) + "%"
                 })
 
+            print(Question_data)
             try:
                 for i in Quiz.expand["Students"]:
                     correct_answer = 0
@@ -164,10 +159,10 @@ def resultquiz(classid):
                 print(e)
 
             if request.method == "POST":
-                if "clear" in request.form:
+                if "clear" in request.form:                   # clear individual student data on result page
                     id = request.form['clear']
                     client.collection("Quiz").update(classid, {
-                        "Students-": id
+                        "Students-": id 
                     })
                     for i in Questions:
                         client.collection("Questions").update(i.id, {
@@ -175,9 +170,9 @@ def resultquiz(classid):
                             "Wrong_Students-": id
                         })
                 
-                if "clearall" in request.form:
+                if "clearall" in request.form:                         
                     client.collection("Quiz").update(classid, {
-                        "Students": []
+                        "Students": []                       # clear all student data 
                     })
                     for i in Questions:
                         client.collection("Questions").update(i.id, {
@@ -190,7 +185,7 @@ def resultquiz(classid):
             return render_template("resultquiz.html", Student_data=Student_data, teacher=True, Questions=Question_data)
         else:
             for i in Questions:
-                if userdata.id in i.correct__students:
+                if userdata.id in i.correct__students:                             # Result page for students 
                     correct_answer += 1
                 else:
                     wrong_answer += 1
@@ -199,9 +194,8 @@ def resultquiz(classid):
                     "name": userdata.name,
                     "correct_answer": correct_answer,
                     "wrong_answer": wrong_answer,
-                    "score": str((correct_answer/len(Questions))*100).split(".")[0] + "%" if correct_answer != 0 else str(0) + "%"
+                    "score": str(int((correct_answer/len(Questions))*100)) + "%" if correct_answer != 0 else str(0) + "%"
             })
             return render_template("resultquiz.html", Student_data=Student_data, teacher=False)
     except Exception as e:
         return render_template("Error.html", error=e)
-
