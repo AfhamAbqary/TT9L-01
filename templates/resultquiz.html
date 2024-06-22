@@ -1,125 +1,111 @@
 <html>
-    <head>
-        <title>Profile</title>
-        <!--<link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">-->
-        <script src="https://cdn.tailwindcss.com"></script>
-        {{ ckeditor.load() }}
-    </head>
-    <body class="bg-white">
-        {% include "navigationBar.html" %}
-        {% if teacher %}
-        <div class="flex">
-            <div class="w-3/12 m-4">
-                <form class="max-w-md mx-auto m-2">   
-                    <div class="relative">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+<head>
+    <title>Quiz Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-purple-50 min-h-screen">
+    {% include "navigationBar.html" %}
+    {% if teacher %}
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <div class="w-full lg:w-1/4">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="relative flex-grow">
+                        <input type="search" id="SearchBar" onkeyup="myFilter()" class="w-full p-2.5 pl-10 text-sm text-gray-900 border-none rounded-lg bg-white shadow-md focus:ring-2 focus:ring-blue-300 transition duration-300" placeholder="Search by name..." required />
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                             </svg>
                         </div>
-                        <input type="search" id="SearchBar" onkeyup="myFilter()" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-black rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search by name..." required />
                     </div>
-                </form>
-                <div class="relative overflow-x-auto w-70 h-72 overscroll-auto m-2 p-2 rounded-md backdrop-blur-sm">
-                    <ul id="users" class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
-                        <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                            <p id="UserName" class="w-full m-1 text-sm font-semibold text-gray-900">
-                                Username
-                            </p>
-                            <p class="m-1 w-full text-xs">
-                                Correct
-                            </p>
-                            <p class="m-1 w-full text-xs">
-                                Wrong
-                            </p>
-                            <p class="m-1 w-full text-xs">
-                                Score
-                            </p>
-                            <p class="m-1 w-full text-xs">
-                                Clear
-                            </p>
-                        </div>
+                    <form method="post">
+                        <button id="clearall" name="clearall" type="submit" class="bg-red-500 text-white py-2.5 px-4 mt-5 rounded-lg hover:bg-red-600 transition duration-300 text-sm font-medium shadow-md hover:shadow-lg">Clear All</button>
+                    </form>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                    <ul id="users" class="divide-y divide-gray-200 max-h-[28rem] overflow-y-auto text-sm">
                         {% for i in Student_data %}
-                                <li id="UserInfo" class=" pb-3 sm:pb-4">
-                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <p id="UserName" class="bg-white w-full m-1 text-sm font-semibold text-gray-900">
-                                            {{i['name']}}
-                                        </p>
-                                        <p class="m-1 w-full justify-self-center text-sm">
-                                            {{i['correct_answer']}}
-                                        </p>
-                                        <p class="m-1 w-full justify-self-center text-sm">
-                                            {{i['wrong_answer']}}
-                                        </p>
-                                        <p class="m-1 w-full justify-self-center text-sm">
-                                            {{i['score']}}
-                                        </p>
-                                        <form method="post">
-                                            <button id="clear" value="{{i['id']}}" name="clear" type="submit" class="m-1 p-1 rounded drop-shadow-md bg-red-500 hover:bg-red-800">Clear</button>
-                                        </form>
+                        <li id="UserInfo" class="px-4 py-3 hover:bg-gray-50 transition duration-150 ease-in-out">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-grow mr-4">
+                                    <div id="UserName" class="font-medium text-gray-900 mb-0.5">{{i['name']}}</div>
+                                    <div class="text-xs text-gray-500 flex items-center space-x-2">
+                                        <span class="bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Correct: {{i['correct_answer']}}</span>
+                                        <span class="bg-red-100 text-red-800 px-1.5 py-0.5 rounded">Wrong: {{i['wrong_answer']}}</span>
+                                        <span class="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Score: {{i['score']}}</span>
                                     </div>
-                                </li>
+                                </div>
+                                <form method="post">
+                                    <button id="clear" value="{{i['id']}}" name="clear" type="submit" class="text-xs bg-red-500 text-white px-3 py-1.5 rounded-full hover:bg-red-600 transition duration-300 shadow-sm hover:shadow-md">Clear</button>
+                                </form>
+                            </div>
+                        </li>
                         {% endfor %}
                     </ul>
                 </div>
-                <form method="post">
-                    <button id="clearall" name="clearall" type="submit" class="m-1 p-1 rounded drop-shadow-md mr-auto bg-red-500 hover:bg-red-800">Clear All</button>
-                </form>
             </div>
-            <div class="grid grid-cols-1 w-full m-4 gap-2">
-            {% for i in Questions %}
-                <div class="bg-slate-200 border border-gray-300 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
-                    <p class="text-2xl font-semibold m-4">{{i['name']}}</p>
-                    <div class="grid grid-cols-3">
-                        <p class="justify-self-center">Correct Answer</p>
-                        <p class="justify-self-center">Wrong Answer</p>
-                        <p class="justify-self-center">Score</p>
-                    </div>
-                    <div class="grid grid-cols-3">
-                        <p class="text-2xl font-semibold m-4 text-lime-500 justify-self-center">{{i['Correct']}}</p>
-                        <p class="text-2xl font-semibold m-4 text-rose-700 justify-self-center">{{i['Wrong']}}</p>
-                        <p class="text-2xl font-semibold m-4 justify-self-center">{{i['Score']}}</p>
+            <div class="w-full lg:w-3/4 grid gap-6">
+                {% for i in Questions %}
+                <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-4">{{i['name']}}</h3>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <p class="text-sm text-gray-600 mb-1">Correct Answer</p>
+                            <p class="text-2xl font-bold text-green-600">{{i['Correct']}}</p>
+                        </div>
+                        <div class="bg-red-50 rounded-lg p-3">
+                            <p class="text-sm text-gray-600 mb-1">Wrong Answer</p>
+                            <p class="text-2xl font-bold text-red-600">{{i['Wrong']}}</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-3">
+                            <p class="text-sm text-gray-600 mb-1">Score</p>
+                            <p class="text-2xl font-bold text-blue-600">{{i['Score']}}</p>
+                        </div>
                     </div>
                 </div>
-            {% endfor %}
-
+                {% endfor %}
             </div>
         </div>
-            <script>
-                function myFilter() {
-                    var input, table, users, name, filter, textValue;
-                    input = document.getElementById("SearchBar");
-                    filter = input.value.toUpperCase();
-                    table = document.getElementById("users");
-                    users = table.getElementsByTagName("li");
-
-                    for (i = 0; i < users.length; i++) {
-                        name = users[i].getElementsByTagName("p")[0];
-                        textValue = name.textContent || name.innerText;
-                        if (textValue.toUpperCase().indexOf(filter) > -1) {
-                            users[i].style.display = "";
-                        } else {
-                            users[i].style.display = "none";
-                        }
-                    }
-                };
-            </script>
-        {% else %}
-            <div class="w-full grid grid-cols-1 gap-10 my-4">
-                <h1 class="mx-10">Result</h1>
-                <p class="text-2xl font-semibold justify-self-center">{{Student_data[0]['name']}}</p>
-                <div class="grid grid-cols-3">
-                    <p class="text-xl font-medium justify-self-center">Correct Answer</p>
-                    <p class="text-xl font-medium justify-self-center">Wrong Answer</p>
-                    <p class="text-xl font-medium justify-self-center">Score</p>
+    </div>
+    {% else %}
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold mb-6 text-center">Result</h1>
+            <p class="text-2xl font-semibold text-center mb-8">{{Student_data[0]['name']}}</p>
+            <div class="grid grid-cols-3 gap-8 text-center">
+                <div>
+                    <p class="text-lg font-medium mb-2">Correct Answer</p>
+                    <p class="text-4xl font-bold text-green-500">{{Student_data[0]['correct_answer']}}</p>
                 </div>
-                <div class="grid grid-cols-3">
-                    <p class="text-4xl font-semibold m-4 text-lime-500 justify-self-center">{{Student_data[0]['correct_answer']}}</p>
-                    <p class="text-4xl font-semibold m-4 text-rose-700 justify-self-center">{{Student_data[0]['wrong_answer']}}</p>
-                    <p class="text-4xl font-semibold m-4 justify-self-center">{{Student_data[0]['score']}}</p>
+                <div>
+                    <p class="text-lg font-medium mb-2">Wrong Answer</p>
+                    <p class="text-4xl font-bold text-red-500">{{Student_data[0]['wrong_answer']}}</p>
+                </div>
+                <div>
+                    <p class="text-lg font-medium mb-2">Score</p>
+                    <p class="text-4xl font-bold text-blue-500">{{Student_data[0]['score']}}</p>
                 </div>
             </div>
-        {% endif %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    </body>
+        </div>
+    </div>
+    {% endif %}
+    <script>
+        function myFilter() {
+            var input, filter, ul, li, name, i, txtValue;
+            input = document.getElementById("SearchBar");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("users");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                name = li[i].getElementsByTagName("div")[0];
+                txtValue = name.textContent || name.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
 </html>

@@ -5,29 +5,52 @@
         <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-gradient-to-r from-cyan-500 to-blue-500 ">
+    <body class="bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 min-h-screen">
         {% include "navigationBar.html" %}
-        <form class="max-w-sm mx-auto" method="post">
-            <div class="mb-5">
-                <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your username</label>
-                <input type="text" name="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Username" required />
+        <div class="flex container mx-auto px-4 py-8 items-center justify-center">
+            <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                <h2 class="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">Login</h2>
+                <form class="space-y-6" method="post">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" name="username" id="username" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your username" required />
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" name="password" id="password" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password" required />
+                    </div>
+                    <div>
+                        <button type="submit" value="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign In</button>
+                    </div>
+                </form>
             </div>
-            <div class="mb-5">
-                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                <input type="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
-            </div>
-            <button type="submit" value="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-        </form>
-  
-  <!--
-        <div class="w-max h-max  text-slate-900 ">
-            <form action="#" method="post" class=" bg-[#303030] w-fit h-fit grid p-5 gap-2">
-                <p><input type="text" name="username" /></p>
-                <p><input type="password" name="password" /></p>
-                <p><input type="submit" value="submit" class="text-gray-100 hover:bg-sky-700"/></p>
-            </form>
         </div>
-    -->
+        {% if error %}
+        <div id="error-alert" class="fixed bottom-0 left-0 right-0 mb-4 mx-4">
+            <div class="max-w-md mx-auto bg-red-100 border-l-4 border-red-500 rounded-r-lg shadow-lg p-4">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3 flex-grow">
+                        <p class="text-sm text-red-700 font-medium">
+                            {{ error }}
+                        </p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <button type="button" class="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" onclick="document.getElementById('error-alert').style.display='none';">
+                            <span class="sr-only">Dismiss</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     </body>
 </html>

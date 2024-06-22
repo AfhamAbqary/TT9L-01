@@ -35,20 +35,17 @@ def login():
             user = request.form['username']
             password = request.form['password']
 
-            try:
-                client.collection("users").auth_with_password(user, password) #Authorize login for data fetching and writing to database
-                session["login"] = [user,cipher.encrypt(password)] #Save login info to session
-                return redirect(url_for("user.home")) # Redirect to user profile
+            client.collection("users").auth_with_password(user, password) #Authorize login for data fetching and writing to database
+            session["login"] = [user,cipher.encrypt(password)] #Save login info to session
             
-            except Exception as e:
-                print("Error:", e) 
-                return render_template("login.html")
             
+            return redirect(url_for("user.home")) # Redirect to user profile
         else:
-            return render_template("login.html")
-        
+            return render_template("login.html", error=None)
     except Exception as e:
-        return render_template("Error.html", error=e)
+        print(e.__dict__, e)
+        return render_template("login.html", error=e)
+            
 
 @user_bp.route("/signup", methods=["POST","GET"])
 def signup():
@@ -61,11 +58,24 @@ def signup():
             passwordC = request.form['passwordC']
             name = request.form['name']
 
-            try:
+            if request.form.get('teacher'):
                 client.collection("users").create( # Create user from data 
                     {
                         "username": user,
-                        "email": email[0],
+                        "email": email,
+                        "password": password,
+                        "passwordConfirm": passwordC,
+                        "emailVisibility": False,
+                        "name": name,
+                        "Teacher": True,
+                        "Class": []
+                    }
+                )
+            else:
+                client.collection("users").create( # Create user from data 
+                    {
+                        "username": user,
+                        "email": email,
                         "password": password,
                         "passwordConfirm": passwordC,
                         "emailVisibility": False,
@@ -75,19 +85,13 @@ def signup():
                     }
                 )
                 
-                return redirect(url_for("user.login")) # Redirect to login page
-            
-            except Exception as e:
-                for i in e.__dict__["data"]["data"]:
-                    print(f'{i}:' + e.__dict__["data"]["data"][i]["message"])
-
-                return render_template("signup.html") # Redirect to Sign Up page again if error
-            
+            return redirect(url_for("user.login")) # Redirect to login page
         else:
-            return render_template("signup.html")
-        
+            return render_template("signup.html", error=None)
     except Exception as e:
-        return render_template("Error.html", error=e)
+                print(e.__dict__, e)
+                return render_template("signup.html", error=e)
+        
     
 @user_bp.route("/logout")
 def logout():
@@ -97,8 +101,8 @@ def logout():
         return redirect(url_for("home.home")) # Redirect to main home page
     
     except Exception as e:
+        print(e.__dict__, e)
         return render_template("Error.html", error=e)
-    #return redirect(url_for(session["lasturl"]))
 
 @user_bp.route("/change", methods=["POST","GET"])
 def change():
@@ -132,19 +136,23 @@ def change():
                     "oldPassword": password
                 })
 
-            client.auth_store.clear() # Clear user login
-            session.pop("login", None) # Remove user data from session
-            
-            if new_password: # Check if new password is registered
-                client.collection("users").auth_with_password(email, new_password) # Login with new password
-                session["login"] = [email,cipher.encrypt(new_password)] # Save login info to session
+            if password == cipher.decrypt(session["login"][1]).decode():
+                client.auth_store.clear() # Clear user login
+                session.pop("login", None) # Remove user data from session
+                
+                if new_password: # Check if new password is registered
+                    client.collection("users").auth_with_password(email, new_password) # Login with new password
+                    session["login"] = [email,cipher.encrypt(new_password)] # Save login info to session
 
-            else: # Check if no new password registered
-                client.collection("users").auth_with_password(email, password) # Login with password
-                session["login"] = [email,cipher.encrypt(password)]  # Save login info to session
+                else: # Check if no new password registered
+                    client.collection("users").auth_with_password(email, password) # Login with password
+                    session["login"] = [email,cipher.encrypt(password)]  # Save login info to session
+            else:
+                return render_template("loginchange.html", error="Wrong password")
 
             return redirect(url_for("user.home")) # redirect to profile page
         return render_template("loginchange.html") # Load change HTML page
     except Exception as e:
-        return render_template("Error.html", error=e)
-
+        print(e.__dict__, e)
+        return render_template("loginchange.html", error=e)
+            

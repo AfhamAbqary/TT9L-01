@@ -1,125 +1,115 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Profile</title>
-        <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
-        <script src="https://cdn.tailwindcss.com"></script>
-        {{ ckeditor.load() }}
-    </head>
-    <body class="bg-white">
-        {% include "navigationBar.html" %}
-        <p class="font-bold text-2xl mb-2 m-5">{{ ClassName }}</p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ClassName }} - Class Page</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    {{ ckeditor.load() }}
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen">
+    {% include "navigationBar.html" %}
+    
+    <div class="container mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-indigo-800 mb-8">{{ ClassName }}</h1>
+        
         {% if teacher %}
-        <section class="flex m-4 rounded backdrop-blur-xl bg-white/30 shadow-lg">
-            <form method="post" id="postSubmit" class="p-2 m-3 rounded-md shrink w-9/12 space-y-4" enctype="multipart/form-data">
-                <input type="text" name="title" class="backdrop-blur-sm bg-white/10 border border-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-300 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Title" required />
+        <section class="bg-white shadow-xl rounded-xl p-8 mb-12">
+            <h2 class="text-2xl font-semibold text-indigo-700 mb-6">Create New Post</h2>
+            <form method="post" id="postSubmit" class="space-y-6" enctype="multipart/form-data">
+                <input type="text" name="title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Title" required />
                 {{ ckeditor.create() }}
-                <div class="flex space-x-4">
-                    <input id="create" type="submit" name="create post" class="mr-auto text-sm text-white mx-2 my-1 py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create Post">
-                    <!--"flex-shrink-0 ml-auto m-1 text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800-->
-                    <div class="flex gap-2 mr-auto">
-                        <input type="file" name="file" class="block w-50 h-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="multiple_files" type="file" multiple>
-
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" value="True" name="MeetConfirm" class="sr-only peer">
-                            <div class="relative w-11 h-6 bg-gray-200  rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                            <span class="ms-3 text-sm font-medium text-gray-900">Includes meet link</span>
-                        </label>
-                    </div>
-  
+                <div class="flex flex-wrap items-center gap-6">
+                    <button id="create" type="submit" name="create post" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">Create Post</button>
+                    <input type="file" name="file" class="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition duration-300" multiple>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" value="True" name="MeetConfirm" class="form-checkbox h-5 w-5 text-indigo-600">
+                        <span class="ml-2 text-gray-700">Includes meet link</span>
+                    </label>
                 </div>
             </form>
-            <div class="w-3/12 m-4">
-                <form class="max-w-md mx-auto m-2">   
-                    <div class="relative">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                            </svg>
-                        </div>
-                        <input type="search" id="SearchBar" onkeyup="myFilter()" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-black rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search by name..." required />
-                    </div>
-                </form>
-                <div class="relative overflow-x-auto w-70  h-72 overscroll-auto m-2 p-2 rounded-md backdrop-blur-sm bg-white/30">
-                    <ul id="users" class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
-                        {% for i in users %}
-                                <li id="UserInfo" class="pb-3 sm:pb-4">
-                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <div class="flex-1 min-w-0">
-                                            <p id="UserName" class="m-1 text-sm font-semibold text-gray-900 truncate">
-                                                {{i.username}}
-                                            </p>
-                                            <p class="m-1 text-sm truncate">
-                                                {% if i.teacher %}
-                                                    Teacher 
-                                                {% else %}
-                                                    Student
-                                                {% endif %}
-                                            </p>
-                                        </div>
-                                        <div class="inline-flex items-center text-base font-medium text-white">
-                                            <form method="post">
-                                                <button id="remove" value="{{i.id}}" name="remove" type="submit" class="m-1 p-1 rounded drop-shadow-md bg-red-500 hover:bg-red-800">Kick Out</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
         </section>
         {% endif %}
-        <div class="flex m-5 gap-3 rounded">
-            <div class=" flex-grow grid grid-cols-1 gap-2 h-max p-2"> <!--bg-slate-400-->
-                {% for i in post %}
-                    <div class="flex bg-slate-200 border border-gray-300 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
-                        <a href="{{ '/classroom/%s' %classid+'/'+i.id}}" class=" w-full font-semibold mr-auto text-xl mb-2">{{i.title}}</a>
+        
+        <div class="flex flex-col lg:flex-row gap-12">
+            <div class="lg:w-2/3">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-6">Posts</h2>
+                <div class="space-y-6">
+                    {% for i in post %}
+                    <div class="bg-white shadow-lg rounded-xl p-6 flex justify-between items-center">
+                        <a href="{{ '/classroom/%s' %classid+'/'+i.id}}" class="text-xl font-medium text-indigo-600 hover:text-indigo-800 transition duration-300">{{i.title}}</a>
                         {% if teacher %}
                         <form method="post">
-                            <button value="{{i.id}}" name="remove post"class="text-sm ml-auto text-white py-1 px-2 rounded drop-shadow-md bg-red-500 hover:bg-red-800">Remove</button>
+                            <button value="{{i.id}}" name="remove post" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 transform hover:-translate-y-1 hover:shadow-md">Remove</button>
                         </form>
                         {% endif %}
                     </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-            <section class="flex-none min-w-96">
-                <div class="min-w-max">
-                    <p>Invite Code: {{ classid }}</p>
+            
+            <div class="lg:w-1/3 space-y-8">
+                <div class="bg-white shadow-lg rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Class Information</h3>
+                    <p class="text-gray-600">Invite Code: <span class="font-medium text-indigo-600">{{ classid }}</span></p>
                 </div>
-                <div class="bg-slate-200 min-w-fit min-h-fit p-2 rounded-md drop-shadow-md">
-                    <p>Quiz Link:</p>
-                    <form action="{{ '/quiz/%s' %classid}}">
-                        <button class="bg-blue-500 text-white my-2 px-4 py-1 rounded-md cursor-pointer hover:bg-blue-600">Quiz</button>
-                    </form>
-                    {% if Visible %}
-                        <p>Status: <b class="text-green-600">Open</b></p>
-                    {% else %}
-                        <p>Status: <b class="text-orange-600">Closed</b></p>
-                    {% endif %}
+                
+                <div class="bg-white shadow-lg rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Quiz</h3>
+                    <p class="text-gray-600 mb-4">Status: 
+                        {% if Visible %}
+                        <span class="text-green-600 font-semibold">Open</span>
+                        {% else %}
+                        <span class="text-orange-600 font-semibold">Closed</span>
+                        {% endif %}
+                    </p>
+                    <a href="{{ '/quiz/%s' %classid}}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">Go to Quiz</a>
                 </div>
-            </section>
+                
+                {% if teacher %}
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Class Members</h3>
+                    <input type="search" id="SearchBar" onkeyup="myFilter()" class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4" placeholder="Search by name...">
+                    <ul id="users" class="max-h-64 overflow-y-auto">
+                        {% for i in users %}
+                        <li id="UserInfo" class="py-2 border-b last:border-b-0">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p id="UserName" class="font-medium text-gray-800">{{i.username}}</p>
+                                    <p class="text-sm text-gray-600">{% if i.teacher %}Teacher{% else %}Student{% endif %}</p>
+                                </div>
+                                <form method="post">
+                                    <button id="remove" value="{{i.id}}" name="remove" type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600 transition duration-300">Kick Out</button>
+                                </form>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
         </div>
-        <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
-        <script>
-            function myFilter() {
-                var input, table, users, name, filter, textValue;
-                input = document.getElementById("SearchBar");
-                filter = input.value.toUpperCase();
-                table = document.getElementById("users");
-                users = table.getElementsByTagName("li");
+    </div>
+    <script>
+        function myFilter() {
+            var input, table, users, name, filter, textValue;
+            input = document.getElementById("SearchBar");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("users");
+            users = table.getElementsByTagName("li");
 
-                for (i = 0; i < users.length; i++) {
-                    name = users[i].getElementsByTagName("p")[0];
-                    textValue = name.textContent || name.innerText;
-                    if (textValue.toUpperCase().indexOf(filter) > -1) {
-                        users[i].style.display = "";
-                    } else {
-                        users[i].style.display = "none";
-                    }
+            for (i = 0; i < users.length; i++) {
+                name = users[i].getElementsByTagName("p")[0];
+                textValue = name.textContent || name.innerText;
+                if (textValue.toUpperCase().indexOf(filter) > -1) {
+                    users[i].style.display = "";
+                } else {
+                    users[i].style.display = "none";
                 }
-            };
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    </body>
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
 </html>

@@ -1,50 +1,66 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Profile</title>
-        <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-white">
-        {% include "navigationBar.html" %}
-        <div class="m-2">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 min-h-screen">
+    {% include "navigationBar.html" %}
+    <div class="container mx-auto px-4 py-12">
+        <div class="mb-12">
             {% if teacher %}
-            <form class="w-full max-w-sm" method="post">
-                <div class="flex items-center border-b py-2">
-                  <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" name="title" type="text" placeholder="Classroom" aria-label="Full name">
-                  <input type="submit" name="create" class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800" value="Create"></input>
+            <h2 class="text-3xl font-bold text-indigo-800 mb-6">Create a New Classroom</h2>
+            <form class="w-full max-w-lg bg-white shadow-lg rounded-xl p-8" method="post">
+                <div class="flex items-center space-x-4">
+                    <input class="flex-grow appearance-none bg-gray-100 border-2 border-gray-200 rounded-lg py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 transition duration-300" name="title" type="text" placeholder="Classroom Name" aria-label="Classroom name">
+                    <button type="submit" name="create" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                        Create
+                    </button>
                 </div>
             </form>
             {% else %}
-            <form class="w-full max-w-sm" method="post">
-                <div class="flex items-center border-b py-2">
-                  <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" name="title" type="text" placeholder="Classroom" aria-label="Full name">
-                  <input type="submit" name="join" value="Join" class="flex-shrink-0  text-sm text-white py-1 px-2 rounded bg-blue-500 hover:bg-blue-800">
+            <h2 class="text-3xl font-bold text-indigo-800 mb-6">Join a Classroom</h2>
+            <form class="w-full max-w-lg bg-white shadow-lg rounded-xl p-8" method="post">
+                <div class="flex items-center space-x-4">
+                    <input class="flex-grow appearance-none bg-gray-100 border-2 border-gray-200 rounded-lg py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 transition duration-300" name="title" type="text" placeholder="Classroom Code" aria-label="Classroom code">
+                    <button type="submit" name="join" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                        Join
+                    </button>
                 </div>
             </form>
             {% endif %}
         </div>
+
         <div>
-            <p>Class: </p>
-            <div class="flex gap-5 m-5">
-            {% for i in classroom %}
-                <a href="{{ '/classroom/%s' %i.id}}" class="max-w-fit hover:scale-105 transition ease-in-out">
-                    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+            <h2 class="text-3xl font-bold text-indigo-800 mb-6">Your Classrooms</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for i in classroom %}
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
+                    <a href="{{ '/classroom/%s' %i.id}}" class="block">
                         <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2">{{i.title}}</div>
-                            <p class="text-gray-700 text-base"> This is your registered classroom! Be sure to check it out!</p>
-                            <br />
+                            <h3 class="font-bold text-xl mb-2 text-indigo-700">{{i.title}}</h3>
+                            <p class="text-gray-600 text-sm">This is your registered classroom! Be sure to check it out!</p>
                         </div>
+                    </a>
+                    <div class="px-6 py-4 bg-gray-50 flex justify-end">
                         {% if teacher %}
-                            <form method="post"><button type="submit" value="{{i.id}}" class="text-sm m-3 text-white py-1 px-2 rounded bg-red-500 hover:bg-red-800" name="leave" >Destroy</button></form>
+                        <form method="post">
+                            <button type="submit" value="{{i.id}}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1" name="leave">Destroy</button>
+                        </form>
                         {% else %}
-                            <form method="post"><button type="submit" value="{{i.id}}" class="text-sm m-3 text-white py-1 px-2 rounded bg-red-500 hover:bg-red-800" name="leave" >Leave</button></form>
+                        <form method="post">
+                            <button type="submit" value="{{i.id}}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1" name="leave">Leave</button>
+                        </form>
                         {% endif %}
                     </div>
-                </a>
-            {% endfor %}
+                </div>
+                {% endfor %}
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    </body>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
 </html>

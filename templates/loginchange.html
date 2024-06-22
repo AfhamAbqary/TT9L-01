@@ -1,38 +1,64 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Profile</title>
+        <title>Update Profile</title>
         <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="bg-gradient-to-r from-cyan-500 to-blue-500 ">
+    <body class="bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 min-h-screen">
         {% include "navigationBar.html" %}
-        <div class="bg-white m-10 p-4 h-full rounded overflow-hidden shadow-lg">
-            <form class="max-w-sm mx-auto" method="post">
-                <div class="mb-5">
-                  <label for="Username" class="block mb-2 text-sm font-medium text-gray-900">Username (Optional)</label>
-                  <input type="Username" name="Username" id="Username" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Username" />
-                </div>
-                <div class="mb-5">
-                    <label for="new-password" class="block mb-2 text-sm font-medium text-gray-900">New password (Optional)</label>
-                    <input type="password" name="new-password" id="new-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                </div>
-                <div class="mb-5">
-                    <label for="repeat-password" class="block mb-2 text-sm font-medium text-gray-900">Confirm new password (Optional)</label>
-                    <input type="password" name="repeat-password" id="repeat-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                  </div>
-                <div class="mb-5">
-                  <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Current password <b class="text-orange-600">*</b></label>
-                  <input type="password" name="password" id="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required/>
-                </div>
-
-
-                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update account</button>
-              </form>
-              
-              
-              
+        <div class="container mx-auto px-4 py-8">
+            <div class="bg-white rounded-lg shadow-xl p-8 max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center  bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">Update Profile</h2>
+                <form class="space-y-6" method="post">
+                    <div>
+                        <label for="Username" class="block text-sm font-medium text-gray-700">Username (Optional)</label>
+                        <input type="text" name="Username" id="Username" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="New username" />
+                    </div>
+                    <div>
+                        <label for="new-password" class="block text-sm font-medium text-gray-700">New password (Optional)</label>
+                        <input type="password" name="new-password" id="new-password" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="New password" />
+                    </div>
+                    <div>
+                        <label for="repeat-password" class="block text-sm font-medium text-gray-700">Confirm new password (Optional)</label>
+                        <input type="password" name="repeat-password" id="repeat-password" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Confirm new password" />
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Current password <span class="text-red-600">*</span></label>
+                        <input type="password" name="password" id="password" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Current password" required/>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Update account</button>
+                    </div>
+                </form>
+            </div>
         </div>
+        {% if error %}
+        <div id="error-alert" class="fixed bottom-0 left-0 right-0 mb-4 mx-4">
+            <div class="max-w-md mx-auto bg-red-100 border-l-4 border-red-500 rounded-r-lg shadow-lg p-4">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3 flex-grow">
+                        <p class="text-sm text-red-700 font-medium">
+                            {{ error }}
+                        </p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <button type="button" class="inline-flex rounded-md p-1.5 text-red-500 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" onclick="document.getElementById('error-alert').style.display='none';">
+                            <span class="sr-only">Dismiss</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     </body>
 </html>
